@@ -3,7 +3,9 @@ public abstract class Product {
     private String productName;
     private double productPrice;
     private int productQuantity;
-   
+
+    public Product() {
+    }
 
     public  Product(String productID, String productName, double productPrice, int productQuantity) {
         this.productID = productID;

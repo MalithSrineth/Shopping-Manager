@@ -2,6 +2,10 @@ public class Clothing extends Product{
     private String size;
     private String color;
 
+    public Clothing() {
+        super();
+    }
+
     public Clothing(String productID, String productName, double productPrice, int productQuantity, String size, String color) {
         super(productID, productName, productPrice, productQuantity);
         this.size = size;
