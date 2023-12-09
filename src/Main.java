@@ -14,7 +14,7 @@ public class Main {
                       "3. Print the list of products\n" +
                       "4. Print the list of products in the cart\n" +
                       "5. Empty the cart\n" +
-                      "6. Print the total price of the cart\n" +
+                      "6. View GUI\n" +
                       "7. Save the list of products to a file\n" +
                       "8. Load the list of products from a file\n" +
                       "9. Exit\n" +
@@ -86,7 +86,7 @@ public class Main {
                     // emptyCart(westminsterShoppingManager);
                     break;
                 case 6:
-                    // printTotalPrice(westminsterShoppingManager);
+                    westminsterShoppingManager.viewGUI();
                     break;
                 case 7:
                     westminsterShoppingManager.fileWriter();

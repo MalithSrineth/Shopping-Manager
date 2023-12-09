@@ -5,6 +5,7 @@ public interface ShoppingManager {
     void removeProduct(Product product);
     void emptyCart();
     void printProducts();
+    void viewGUI();
     void fileWriter() throws IOException;
     void fileReader();
 }

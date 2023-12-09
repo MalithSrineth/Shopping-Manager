@@ -1,6 +1,6 @@
-E01,Smartphone,499.99,15,XYZ Brand,2 Years
-E02,Laptop,899.99,10,ABC Brand,1 Year
-E03,Headphones,89.99,25,PQR Brand,6 Months
-C01,T-Shirt,19.99,50,M,Blue
-C02,Jeans,39.99,30,L,Black
-C03,Jacket,59.99,20,XL,Red
+E,E01,Smartphone,499.99,15,XYZ Brand,2 Years
+E,E02,Laptop,899.99,10,ABC Brand,1 Year
+E,E03,Headphones,89.99,25,PQR Brand,6 Months
+C,C01,T-Shirt,19.99,50,M,Blue
+C,C02,Jeans,39.99,30,L,Black
+C,C03,Jacket,59.99,20,XL,Red

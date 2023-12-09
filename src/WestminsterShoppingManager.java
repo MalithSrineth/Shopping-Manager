@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.SwingUtilities;
+
 public class WestminsterShoppingManager implements ShoppingManager {
     static Scanner input = new Scanner(System.in);
     private static ArrayList<Product> products;
@@ -133,10 +135,12 @@ public class WestminsterShoppingManager implements ShoppingManager {
             }
             System.out.println("=======================================");
         }
+    }
+
+    @Override
+    public void viewGUI() {
+        new ShoppingGUI();
         
-
-
-
     }
 
     @Override
@@ -145,13 +149,25 @@ public class WestminsterShoppingManager implements ShoppingManager {
         FileWriter fileWriter = new FileWriter(file);
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
         for (Product product : products) {
-            fileWriter.write(product.getProductID()+","+product.getProductName()+","+product.getProductPrice()+","+product.getProductQuantity()+",");
             if (product instanceof Electronics) {
                 Electronics electronics = (Electronics) product;
-                fileWriter.write(electronics.getBrandName()+","+electronics.getWarrantyPeriod()+"\n");
+                fileWriter.write("E"+","+
+                                 electronics.getProductID()+","+
+                                 electronics.getProductName()+","+
+                                 electronics.getProductPrice()+","+
+                                 electronics.getProductQuantity()+","+
+                                 electronics.getBrandName()+","+
+                                 electronics.getWarrantyPeriod()+"\n");
+
             } else if (product instanceof Clothing) {
                 Clothing clothing = (Clothing) product;
-                fileWriter.write(clothing.getSize()+","+clothing.getColor()+"\n");
+                fileWriter.write("C"+","+
+                                 clothing.getProductID()+","+
+                                 clothing.getProductName()+","+
+                                 clothing.getProductPrice()+","+
+                                 clothing.getProductQuantity()+","+
+                                 clothing.getSize()+","+
+                                 clothing.getColor()+"\n");
             }
         }
         bufferedWriter.close();
@@ -168,11 +184,11 @@ public class WestminsterShoppingManager implements ShoppingManager {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
-                if (values.length == 6) {
-                    Electronics electronics = new Electronics(values[0], values[1], Double.parseDouble(values[2]), Integer.parseInt(values[3]), values[4], values[5]);
+                if (values[0].equals("E")) {
+                    Electronics electronics = new Electronics(values[1], values[2], Double.parseDouble(values[3]), Integer.parseInt(values[4]), values[5], values[6]);
                     products.add(electronics);
-                } else if (values.length == 5) {
-                    Clothing clothing = new Clothing(values[0], values[1], Double.parseDouble(values[2]), Integer.parseInt(values[3]), values[4], values[5]);
+                } else if (values[0].equals("C")) {
+                    Clothing clothing = new Clothing(values[1], values[2], Double.parseDouble(values[3]), Integer.parseInt(values[4]), values[5], values[6]);
                     products.add(clothing);
                 }
             }
@@ -213,5 +229,7 @@ public class WestminsterShoppingManager implements ShoppingManager {
     public static ArrayList<Product> getProducts() {
         return products;
     }
+
+    
     
 }
