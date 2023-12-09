@@ -1,8 +1,8 @@
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -24,12 +24,14 @@ public class WestminsterShoppingManager implements ShoppingManager {
         Electronics electronics3 = new Electronics("E03", "Headphones", 89.99, 25, "PQR Brand", "6 Months");
         
         // Adding the objects to the products ArrayList
-        products.add(electronics1);
-        products.add(electronics2);
-        products.add(electronics3);
-        products.add(clothing1);
-        products.add(clothing2);
-        products.add(clothing3);
+        // products.add(electronics1);
+        // products.add(electronics2);
+        // products.add(electronics3);
+        // products.add(clothing1);
+        // products.add(clothing2);
+        // products.add(clothing3);
+
+        fileReader();
 
         
     }
@@ -161,8 +163,23 @@ public class WestminsterShoppingManager implements ShoppingManager {
 
     @Override
     public void fileReader() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'fileReader'");
+        File file = new File("src/products.txt");
+        try(BufferedReader br = new BufferedReader(new java.io.FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(",");
+                if (values.length == 6) {
+                    Electronics electronics = new Electronics(values[0], values[1], Double.parseDouble(values[2]), Integer.parseInt(values[3]), values[4], values[5]);
+                    products.add(electronics);
+                } else if (values.length == 5) {
+                    Clothing clothing = new Clothing(values[0], values[1], Double.parseDouble(values[2]), Integer.parseInt(values[3]), values[4], values[5]);
+                    products.add(clothing);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error: "+e.getMessage());
+        }
+        System.out.println("Products are loaded successfully");
     }
 
     public static int getVerifiedIntInput() {
