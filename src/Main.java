@@ -60,6 +60,21 @@ public class Main {
                     break;
 
                 case 2:
+                    System.out.println("Enter the product ID to remove");
+                    String productID = WestminsterShoppingManager.input.next();
+                    Product product = null;
+                    for (Product p : products) {
+                        if (p.getProductID().equals(productID)) {
+                            product = p;
+                            break;
+                        } else {
+                            System.out.println("Product not found");
+                        }
+                    }
+                    if (product != null) {
+                        westminsterShoppingManager.removeProduct(product);
+                    }
+
                     // removeProduct(westminsterShoppingManager);
                     break;
                 case 3:
@@ -88,37 +103,5 @@ public class Main {
                     break;
             }
         } while (menuChoice != 9);
-
-
-        System.out.println("=====================================");
-        System.out.println("Select the product type to add");
-        System.out.println("1. Electronics");
-        System.out.println("2. Clothes");
-            
-        int choice = WestminsterShoppingManager.getVerifiedIntInput();
-        Product product = null;
-
-        do {
-            System.out.println("=====================================");
-            System.out.println("Select the product type to add");
-            System.out.println("1. Electronics");
-            System.out.println("2. Clothes");
-        
-            choice = WestminsterShoppingManager.getVerifiedIntInput();
-        
-            switch (choice) {
-                case 1:
-                    product = new Electronics();
-                    break;
-                case 2:
-                    product = new Clothing();
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please enter 1 for Electronics or 2 for Clothes.");
-                    break;
-            }
-        } while (product == null);
-
-        westminsterShoppingManager.addProduct(product, choice);
     }
 }

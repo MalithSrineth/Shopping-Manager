@@ -17,11 +17,12 @@ public class WestminsterShoppingManager implements ShoppingManager {
             return;
         } else {
             System.out.println("\nEnter the product ID");
-            String productID = input.next();
+            input.nextLine();
+            String productID = input.nextLine();
             product.setProductID(productID);
 
             System.out.println("\nEnter the product name");
-            String productName = input.next();
+            String productName = input.nextLine();
             product.setProductName(productName);
 
             System.out.println("\nEnter the product price");
@@ -31,28 +32,29 @@ public class WestminsterShoppingManager implements ShoppingManager {
             System.out.println("\nEnter the product quantity");
             int productQuantity = getVerifiedIntInput();
             product.setProductQuantity(productQuantity);
+            input.nextLine();
 
             switch (choice) {
                 case 1:
                     System.out.println("\nEnter the brand name");
-                    String brandName = input.next();
+                    String brandName = input.nextLine();
                     System.out.println("\nEnter the warranty period");
-                    String warrantyPeriod = input.next();
+                    String warrantyPeriod = input.nextLine();
                     product = new Electronics(product.getProductID(), product.getProductName(), product.getProductPrice(), product.getProductQuantity(), brandName, warrantyPeriod);
                     products.add(product);
                     System.out.println("Product: "+product.getProductName()+" - "+product.getProductID()+" is added successfully\n");
                     break;
                 case 2:
                     System.out.println("\nEnter the size");
-                    String size = input.next();
+                    String size = input.nextLine();
                     System.out.println("\nEnter the material");
-                    String material = input.next();
+                    String material = input.nextLine();
                     product = new Clothing(product.getProductID(), product.getProductName(), product.getProductPrice(), product.getProductQuantity(), size, material);
                     products.add(product);
                     System.out.println("Product: "+product.getProductName()+" - "+product.getProductID()+" is added successfully\n");
                     break;
                 default:
-                    System.out.println("Invalid choice/n");
+                    System.out.println("Invalid choice\n");
                     break;
             }
         }
@@ -61,8 +63,18 @@ public class WestminsterShoppingManager implements ShoppingManager {
 
     @Override
     public void removeProduct(Product product) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeProduct'");
+        products.remove(product);
+        String details = ("\n=======================================\n"+
+                          "Product Details\n"+
+                          "=======================================\n"+
+                          "* Product Type: "+product.getClass().getName()+"\n"+
+                          "* Product ID: "+product.getProductID()+"\n"+
+                          "* Product Name: "+product.getProductName()+"\n"+
+                          "=======================================\n"+
+                          "This Product is removed successfully\n"+
+                          "=======================================\n"+
+                          "\nProducts Remaining in the System - "+products.size()+"\n");
+        System.out.println(details);
     }
 
     @Override
