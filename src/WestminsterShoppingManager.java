@@ -8,6 +8,25 @@ public class WestminsterShoppingManager implements ShoppingManager {
 
     public WestminsterShoppingManager() {
         WestminsterShoppingManager.products = new ArrayList<>(50);
+        // Creating 3 Clothing objects
+        Clothing clothing1 = new Clothing("C01", "T-Shirt", 19.99, 50, "M", "Blue");
+        Clothing clothing2 = new Clothing("C02", "Jeans", 39.99, 30, "L", "Black");
+        Clothing clothing3 = new Clothing("C03", "Jacket", 59.99, 20, "XL", "Red");
+
+        // Creating 3 Electronics objects
+        Electronics electronics1 = new Electronics("E01", "Smartphone", 499.99, 15, "XYZ Brand", "2 Years");
+        Electronics electronics2 = new Electronics("E02", "Laptop", 899.99, 10, "ABC Brand", "1 Year");
+        Electronics electronics3 = new Electronics("E03", "Headphones", 89.99, 25, "PQR Brand", "6 Months");
+        
+        // Adding the objects to the products ArrayList
+        products.add(electronics1);
+        products.add(electronics2);
+        products.add(electronics3);
+        products.add(clothing1);
+        products.add(clothing2);
+        products.add(clothing3);
+
+        
     }
 
     @Override
@@ -47,9 +66,9 @@ public class WestminsterShoppingManager implements ShoppingManager {
                 case 2:
                     System.out.println("\nEnter the size");
                     String size = input.nextLine();
-                    System.out.println("\nEnter the material");
-                    String material = input.nextLine();
-                    product = new Clothing(product.getProductID(), product.getProductName(), product.getProductPrice(), product.getProductQuantity(), size, material);
+                    System.out.println("\nEnter the Color");
+                    String color = input.nextLine();
+                    product = new Clothing(product.getProductID(), product.getProductName(), product.getProductPrice(), product.getProductQuantity(), size, color);
                     products.add(product);
                     System.out.println("Product: "+product.getProductName()+" - "+product.getProductID()+" is added successfully\n");
                     break;
@@ -85,8 +104,32 @@ public class WestminsterShoppingManager implements ShoppingManager {
 
     @Override
     public void printProducts() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'printProducts'");
+        //sort products alphabetically by product ID
+        products.sort((Product p1, Product p2) -> p1.getProductID().compareTo(p2.getProductID()));
+        System.out.println("\n=======================================");
+        System.out.println("Product List       : "+products.size()+" Products");
+        System.out.println("=======================================");
+        for (Product product : products) {
+            System.out.println("* Product Type     : "+product.getClass().getName());
+            System.out.println("* Product ID       : "+product.getProductID());
+            System.out.println("* Product Name     : "+product.getProductName());
+            System.out.println("* Product Price    : "+product.getProductPrice());
+            System.out.println("* Product Quantity : "+product.getProductQuantity());
+            if (product instanceof Electronics) {
+                Electronics electronics = (Electronics) product;
+                System.out.println("* Brand Name       : "+electronics.getBrandName());
+                System.out.println("* Warranty Period  : "+electronics.getWarrantyPeriod()+"\n");
+            } else if (product instanceof Clothing) {
+                Clothing clothing = (Clothing) product;
+                System.out.println("* Size             : "+clothing.getSize());
+                System.out.println("* Color            : "+clothing.getColor()+"\n");
+            }
+            System.out.println("=======================================");
+        }
+        
+
+
+
     }
 
     @Override

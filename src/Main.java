@@ -74,11 +74,9 @@ public class Main {
                     if (product != null) {
                         westminsterShoppingManager.removeProduct(product);
                     }
-
-                    // removeProduct(westminsterShoppingManager);
                     break;
                 case 3:
-                    // printProducts(westminsterShoppingManager);
+                    westminsterShoppingManager.printProducts();
                     break;
                 case 4:
                     // printProductsInCart(westminsterShoppingManager);
