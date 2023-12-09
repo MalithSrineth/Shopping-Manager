@@ -1,3 +1,8 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -133,9 +138,25 @@ public class WestminsterShoppingManager implements ShoppingManager {
     }
 
     @Override
-    public void fileWriter() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'fileWriter'");
+    public void fileWriter() throws IOException {
+        File file = new File("src/products.txt");
+        FileWriter fileWriter = new FileWriter(file);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        for (Product product : products) {
+            fileWriter.write(product.getProductID()+","+product.getProductName()+","+product.getProductPrice()+","+product.getProductQuantity()+",");
+            if (product instanceof Electronics) {
+                Electronics electronics = (Electronics) product;
+                fileWriter.write(electronics.getBrandName()+","+electronics.getWarrantyPeriod()+"\n");
+            } else if (product instanceof Clothing) {
+                Clothing clothing = (Clothing) product;
+                fileWriter.write(clothing.getSize()+","+clothing.getColor()+"\n");
+            }
+        }
+        bufferedWriter.close();
+        fileWriter.close();
+        System.out.println("Products are saved successfully");
+        System.out.println("=======================================");
+
     }
 
     @Override

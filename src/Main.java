@@ -1,7 +1,8 @@
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         WestminsterShoppingManager westminsterShoppingManager = new WestminsterShoppingManager();
         ArrayList<Product> products = WestminsterShoppingManager.getProducts();
 
@@ -88,7 +89,7 @@ public class Main {
                     // printTotalPrice(westminsterShoppingManager);
                     break;
                 case 7:
-                    // saveProductsToFile(westminsterShoppingManager);
+                    westminsterShoppingManager.fileWriter();
                     break;
                 case 8:
                     // loadProductsFromFile(westminsterShoppingManager);
