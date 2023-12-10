@@ -1,7 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ShoppingGUI extends JFrame {
@@ -72,6 +71,30 @@ public class ShoppingGUI extends JFrame {
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
         add(categoryComboBox, gbc);
+
+        categoryComboBox.addActionListener(categoryComboBoxActionEvent -> {
+            String selectedCategory = (String) categoryComboBox.getSelectedItem();
+            ArrayList<Product> products = WestminsterShoppingManager.getProducts();
+            if (selectedCategory.equals("All")) {
+                productsTable.setModel(new DefaultTableModel(convertListToData(products), new String[]{"Product ID", "Name", "Category", "Price(£)", "Info"}));
+            } else if (selectedCategory.equals("Electronics")) {
+                ArrayList<Product> electronics = new ArrayList<>();
+                for (Product product : products) {
+                    if (product instanceof Electronics) {
+                        electronics.add(product);
+                    }
+                }
+                productsTable.setModel(new DefaultTableModel(convertListToData(electronics), new String[]{"Product ID", "Name", "Category", "Price(£)", "Info"}));
+            } else if (selectedCategory.equals("Clothing")) {
+                ArrayList<Product> clothing = new ArrayList<>();
+                for (Product product : products) {
+                    if (product instanceof Clothing) {
+                        clothing.add(product);
+                    }
+                }
+                productsTable.setModel(new DefaultTableModel(convertListToData(clothing), new String[]{"Product ID", "Name", "Category", "Price(£)", "Info"}));
+            }
+        });
 
         // Shopping cart button at the top-right
         gbc.gridx = 2;

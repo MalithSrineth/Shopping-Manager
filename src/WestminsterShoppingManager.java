@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.SwingUtilities;
-
 public class WestminsterShoppingManager implements ShoppingManager {
     static Scanner input = new Scanner(System.in);
     private static ArrayList<Product> products;
