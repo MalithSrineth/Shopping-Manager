@@ -11,12 +11,28 @@ public class User {
     private String country;
     private int postalCode;
     private String phoneNumber;
+
+    public User() {
+    }
+
+    public User(String firstName, String lastName, String gender, int age, String username, String email, char[] password, String address, String city, String country, int postalCode, String phoneNumber) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.age = age;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.city = city;
+        this.country = country;
+        this.postalCode = postalCode;
+        this.phoneNumber = phoneNumber;
+    }
     
 
-    public User(char[] password, String username) {
-        this.password = password;
-        this.username = username;
-    }
+    
+
 
     public String getFirstName() {
         return firstName;
@@ -25,8 +41,10 @@ public class User {
     public void setFirstName(String firstName) {
         if (firstName.matches("[a-zA-Z]+")) {
             this.firstName = firstName;
+        } else if (firstName.equals("")) {
+            throw new IllegalArgumentException("First Name Field is Empty");
         } else {
-            System.out.println("Invalid first name");
+            throw new IllegalArgumentException("Invalid First Name");
         }
     }
 
@@ -37,8 +55,10 @@ public class User {
     public void setLastName(String lastName) {
         if (lastName.matches("[a-zA-Z]+")) {
             this.lastName = lastName;
+        } else if (lastName.equals("")) {
+            throw new IllegalArgumentException("Last Name Field is Empty");
         } else {
-            System.out.println("Invalid last name");
+            throw new IllegalArgumentException("Invalid Last Name");
         }
     }
 
@@ -47,7 +67,13 @@ public class User {
     }
 
     public void setGender(String gender) {
-        this.gender = gender;
+        if (gender.matches("[a-zA-Z]+")) {
+            this.gender = gender;
+        } else if (gender.equals("")) {
+            throw new IllegalArgumentException("Gender Field is Empty");
+        } else {
+            throw new IllegalArgumentException("Invalid Gender");
+        }
     }
 
     public  int getAge() {
@@ -57,8 +83,10 @@ public class User {
     public void setAge(int age) {
         if (age >= 18) {
             this.age = age;
+        } else if (age == 0) {
+            throw new IllegalArgumentException("Age Field is Empty");
         } else {
-            System.out.println("Invalid age");
+            throw new IllegalArgumentException("Invalid Age");
         }
     }
 
@@ -66,7 +94,11 @@ public class User {
         return username;
     }
     public void setUsername(String username) {
-        this.username = username;
+        if (username.matches("[a-zA-Z0-9]+")) {
+            this.username = username;
+        } else {
+            System.out.println("Invalid username");
+        }
     }
 
     public String getEmail() {
@@ -76,8 +108,10 @@ public class User {
     public void setEmail(String email) {
         if (email.matches("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$")) {
             this.email = email;
+        } else if (email.equals("")) {
+            throw new IllegalArgumentException("Email Field is Empty");
         } else {
-            System.out.println("Invalid email");
+            throw new IllegalArgumentException("Invalid Email");
         }
     }
 
@@ -85,6 +119,15 @@ public class User {
         return password;
     }
     public void setPassword(char[] password) {
+        if (password.length >= 8) {
+            this.password = password;
+        } else if (password.length == 0) {
+            throw new IllegalArgumentException("Password Field is Empty");
+        } else if (password.length < 8) {
+            throw new IllegalArgumentException("Password is too short");
+        } else {
+            throw new IllegalArgumentException("Invalid Password");
+        }
         this.password = password;
     }
 
@@ -94,8 +137,10 @@ public class User {
     public void setAddress(String address) {
         if (address.matches("[a-zA-Z0-9]+")) {
             this.address = address;
+        } else if (address.equals("")) {
+            throw new IllegalArgumentException("Address Field is Empty");
         } else {
-            System.out.println("Invalid address");
+            throw new IllegalArgumentException("Invalid Address");
         }
     }
 
@@ -106,8 +151,10 @@ public class User {
     public void setCity(String city) {
         if (city.matches("[a-zA-Z]+")) {
             this.city = city;
+        } else if (city.equals("")) {
+            throw new IllegalArgumentException("City Field is Empty");
         } else {
-            System.out.println("Invalid city");
+            throw new IllegalArgumentException("Invalid City");
         }
     }
 
@@ -118,8 +165,10 @@ public class User {
     public void setCountry(String country) {
         if (country.matches("[a-zA-Z]+")) {
             this.country = country;
+        } else if (country.equals("")) {
+            throw new IllegalArgumentException("Country Field is Empty");
         } else {
-            System.out.println("Invalid country");
+            throw new IllegalArgumentException("Invalid Country");
         }
     }
 
@@ -130,8 +179,10 @@ public class User {
     public void setPostalCode(int postalCode) {
         if (postalCode >= 10000 && postalCode <= 99999) {
             this.postalCode = postalCode;
+        } else if (postalCode == 0) {
+            throw new IllegalArgumentException("Postal Code Field is Empty");
         } else {
-            System.out.println("Invalid postal code");
+            throw new IllegalArgumentException("Invalid Postal Code");
         }
     }
 
@@ -142,8 +193,10 @@ public class User {
     public void setPhoneNumber(String phoneNumber) {
         if (phoneNumber.matches("[0-9]+") && phoneNumber.length() == 10) {
             this.phoneNumber = phoneNumber;
+        } else if (phoneNumber.equals("")) {
+            throw new IllegalArgumentException("Phone Number Field is Empty");
         } else {
-            System.out.println("Invalid phone number");
+            throw new IllegalArgumentException("Invalid Phone Number");
         }
     }
 

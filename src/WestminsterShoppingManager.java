@@ -9,7 +9,8 @@ import java.util.Scanner;
 public class WestminsterShoppingManager implements ShoppingManager {
     static Scanner input = new Scanner(System.in);
     private static ArrayList<Product> products;
-    public static Object getProducts;
+    private static ArrayList<User> users;
+    //public static Object getProducts;
 
     public WestminsterShoppingManager() {
         WestminsterShoppingManager.products = new ArrayList<>(50);

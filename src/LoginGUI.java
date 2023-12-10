@@ -5,8 +5,8 @@ import java.awt.event.ActionListener;
 
 public class LoginGUI extends JFrame {
 
-    private JTextField usernameField;
-    private JPasswordField passwordField;
+    private JTextField usernameField, firstNameField, lastNameField, genderField, ageField, signUpUsernameField, emailField, addressLine1Field, addressLine2Field, cityField, countryField, postalCodeField, phoneNumberField;
+    private JPasswordField logInPasswordField, signUPasswordField, reEnterPasswordField;
     private JButton loginButton, signUpButton;
     private JLabel welcomeLabel, usernameLabel, passwordLabel;
 
@@ -27,7 +27,21 @@ public class LoginGUI extends JFrame {
         usernameLabel = new JLabel("User Name:");
         passwordLabel = new JLabel("Password:");
         usernameField = new JTextField(20);
-        passwordField = new JPasswordField(20);
+        logInPasswordField = new JPasswordField(20);
+        firstNameField = new JTextField(20);
+        lastNameField = new JTextField(20);
+        genderField = new JTextField(20);
+        ageField = new JTextField(20);
+        emailField = new JTextField(20);
+        signUpUsernameField = new JTextField(20);
+        signUPasswordField = new JPasswordField(20);
+        reEnterPasswordField = new JPasswordField(20);
+        addressLine1Field = new JTextField(40);
+        addressLine2Field = new JTextField(40);
+        cityField = new JTextField(20);
+        countryField = new JTextField(20);
+        postalCodeField = new JTextField(20);
+        phoneNumberField = new JTextField(20);
         loginButton = new JButton("Login");
         signUpButton = new JButton("Sign Up");
 
@@ -72,7 +86,7 @@ public class LoginGUI extends JFrame {
         add(passwordLabel, gbc);
 
         gbc.gridx++;
-        add(passwordField, gbc);
+        add(logInPasswordField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
@@ -99,56 +113,56 @@ public class LoginGUI extends JFrame {
         signUpDialog.add(new JLabel("First Name:"), gbc);
 
         gbc.gridy ++;
-        signUpDialog.add(new JTextField(20), gbc);
+        signUpDialog.add(firstNameField, gbc);
 
         gbc.gridx ++;
         gbc.gridy --;
         signUpDialog.add(new JLabel("Last Name:"), gbc);
 
         gbc.gridy ++;
-        signUpDialog.add(new JTextField(20), gbc);
+        signUpDialog.add(lastNameField, gbc);
 
         gbc.gridx --;
         gbc.gridy ++;
         signUpDialog.add(new JLabel("Gender:"), gbc);
 
         gbc.gridy ++;
-        signUpDialog.add(new JTextField(20), gbc);
+        signUpDialog.add(genderField, gbc);
 
         gbc.gridx ++;
         gbc.gridy --;
         signUpDialog.add(new JLabel("Age:"), gbc);
 
         gbc.gridy ++;
-        signUpDialog.add(new JTextField(20), gbc);
+        signUpDialog.add(ageField, gbc);
         
         gbc.gridx --;
         gbc.gridy ++;
         signUpDialog.add(new JLabel("Username:"), gbc);
         
         gbc.gridy ++;
-        signUpDialog.add(new JTextField(20), gbc);
+        signUpDialog.add(signUpUsernameField, gbc);
 
         gbc.gridx ++;
         gbc.gridy --;
         signUpDialog.add(new JLabel("Email:"), gbc);
 
         gbc.gridy ++;
-        signUpDialog.add(new JTextField(20), gbc);
+        signUpDialog.add(emailField, gbc);
 
         gbc.gridx --;
         gbc.gridy ++;
         signUpDialog.add(new JLabel("Password:"), gbc);
 
         gbc.gridy ++;
-        signUpDialog.add(new JPasswordField(20), gbc);
+        signUpDialog.add(signUPasswordField, gbc);
 
         gbc.gridx ++;
         gbc.gridy --;
         signUpDialog.add(new JLabel("Re-Enter Password:"), gbc);
 
         gbc.gridy ++;
-        signUpDialog.add(new JPasswordField(20), gbc);
+        signUpDialog.add(reEnterPasswordField, gbc);
         
         gbc.gridx --;
         gbc.gridy ++;
@@ -156,41 +170,41 @@ public class LoginGUI extends JFrame {
         signUpDialog.add(new JLabel("Address Line 1:"), gbc);
 
         gbc.gridy ++;
-        signUpDialog.add(new JTextField(40), gbc);
+        signUpDialog.add(addressLine1Field, gbc);
 
         gbc.gridy ++;
         signUpDialog.add(new JLabel("Address Line 2:"), gbc);
 
         gbc.gridy ++;
-        signUpDialog.add(new JTextField(40), gbc);
+        signUpDialog.add(addressLine2Field, gbc);
 
         gbc.gridy ++;
         gbc.gridwidth = 1;
         signUpDialog.add(new JLabel("City:"), gbc);
 
         gbc.gridy ++;
-        signUpDialog.add(new JTextField(20), gbc);
+        signUpDialog.add(cityField, gbc);
 
         gbc.gridx ++;
         gbc.gridy --;
         signUpDialog.add(new JLabel("Country:"), gbc);
 
         gbc.gridy ++;
-        signUpDialog.add(new JTextField(20), gbc);
+        signUpDialog.add(countryField, gbc);
 
         gbc.gridx --;
         gbc.gridy ++;
         signUpDialog.add(new JLabel("Postal Code:"), gbc);
 
         gbc.gridy ++;
-        signUpDialog.add(new JTextField(20), gbc);
+        signUpDialog.add(postalCodeField, gbc);
 
         gbc.gridx ++;
         gbc.gridy --;
         signUpDialog.add(new JLabel("Phone Number:"), gbc);
 
         gbc.gridy ++;
-        signUpDialog.add(new JTextField(20), gbc);
+        signUpDialog.add(phoneNumberField, gbc);
 
         gbc.gridx --;
         gbc.gridy ++;
@@ -215,7 +229,43 @@ public class LoginGUI extends JFrame {
         createAccountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Placeholder for creating an account logic
+                // Placeholder for sign up logic
+                User user = new User();
+                try {
+                    // Assume firstNameField is your JTextField for the first name input
+                    String firstName = firstNameField.getText();
+                    // Assuming 'user' is an instance of your User class
+                    user.setFirstName(firstName);
+                    // ... the rest of your account creation logic ...
+        
+                    // If the name is valid and account creation is successful, close the dialog
+                    signUpDialog.setVisible(false);
+                    signUpDialog.dispose();
+                } catch (IllegalArgumentException ex) {
+                    // Show the dialog box with the error message
+                    JOptionPane.showMessageDialog(signUpDialog, ex.getMessage(), "Input Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+                //user.setFirstName(firstNameField.getText());
+                user.setLastName(lastNameField.getText());
+                user.setGender(genderField.getText());
+                user.setAge(Integer.parseInt(ageField.getText()));
+                user.setUsername(signUpUsernameField.getText());
+                user.setEmail(emailField.getText());
+                if (signUPasswordField.getPassword().equals(reEnterPasswordField.getPassword())) {
+                    user.setPassword(signUPasswordField.getPassword());
+                } else {
+                    JOptionPane.showMessageDialog(LoginGUI.this,
+                        "Passwords do not match!");
+                }
+                user.setPassword(signUPasswordField.getPassword());
+
+
+
+                JOptionPane.showMessageDialog(LoginGUI.this,
+                        "Account Created!");
+                
+                
                 signUpDialog.setVisible(false); // Hide the dialog
                 signUpDialog.dispose(); // Destroy the dialog and free resources
             }
