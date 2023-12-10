@@ -228,6 +228,17 @@ public class WestminsterShoppingManager implements ShoppingManager {
         return products;
     }
 
+    public static Product getProduct(String productID) {
+        Product product = null;
+        for (Product p : products) {
+            if (p.getProductID().equals(productID)) {
+                product = p;
+                break;
+            }
+        }
+        return product;
+    }
+
     
     
 }

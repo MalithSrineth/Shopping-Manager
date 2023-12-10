@@ -8,7 +8,8 @@ public class ShoppingGUI extends JFrame {
     private JComboBox<String> categoryComboBox;
     private JTable productsTable;
     private JLabel productIdLabel, categoryLabel, nameLabel, sizeLabel, colorLabel, availableLabel, productCategoryLabel;
-    private JButton shoppingCartButton, addToCartButton;
+    private JButton shoppingCartButton, sorButton, addToCartButton;
+    private JScrollPane scrollPane;
 
     public ShoppingGUI() {
         setTitle("Westminster Shopping Centre");
@@ -33,13 +34,17 @@ public class ShoppingGUI extends JFrame {
         // Shopping cart button
         shoppingCartButton = new JButton("Shopping Cart");
 
+        // Sort button
+        sorButton = new JButton("Sort");
+
         // Table for product listings
         String[] columnNames = {"Product ID", "Name", "Category", "Price(£)", "Info"};
 
-        // Initialize your ArrayList<Product> and populate it with Product instances
+        //Populating the table with data
         ArrayList<Product> products = WestminsterShoppingManager.getProducts();
         DefaultTableModel model = new DefaultTableModel(convertListToData(products), columnNames);
         productsTable = new JTable(model);
+        scrollPane = new JScrollPane(productsTable);
 
         // Labels for product details
         productIdLabel = new JLabel();
@@ -61,13 +66,15 @@ public class ShoppingGUI extends JFrame {
         // Label for the category combo box
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.weightx = 1;
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.LINE_END;
         add(productCategoryLabel, gbc);
 
-        // Category combo box next to the label
-        gbc.gridx = 1;
-        gbc.gridy = 0;
+        // Category combo box 
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 1;
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
         add(categoryComboBox, gbc);
@@ -99,23 +106,58 @@ public class ShoppingGUI extends JFrame {
         // Shopping cart button at the top-right
         gbc.gridx = 2;
         gbc.gridy = 0;
+        gbc.weightx = 1;
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.LINE_END;
         add(shoppingCartButton, gbc);
 
+        // Sort button at the top-right
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.weightx = 1;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        add(sorButton, gbc);
+
         // Reset to default for the rest
         gbc.gridwidth = 3;
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
 
         // Table in the center
-        add(new JScrollPane(productsTable), gbc);
+        add(scrollPane, gbc);
+
+        productsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = productsTable.rowAtPoint(evt.getPoint());
+                int col = productsTable.columnAtPoint(evt.getPoint());
+                if (row >= 0 && col >= 0) {
+                    String productID = (String) productsTable.getValueAt(row, 0);
+                    Product product = WestminsterShoppingManager.getProduct(productID);
+                    productIdLabel.setText("Product ID: " + product.getProductID());
+                    categoryLabel.setText("Category: " + product.getClass().getName());
+                    nameLabel.setText("Name: " + product.getProductName());
+                    if (product instanceof Electronics) {
+                        sizeLabel.setText("Brand Name: " + ((Electronics) product).getBrandName());
+                        colorLabel.setText("Warranty Period: " + ((Electronics) product).getWarrantyPeriod());
+                    } else if (product instanceof Clothing) {
+                        sizeLabel.setText("Size: " + ((Clothing) product).getSize());
+                        colorLabel.setText("Color: " + ((Clothing) product).getColor());
+                    } else {
+                        sizeLabel.setText("");
+                        colorLabel.setText("");
+                    }
+                    availableLabel.setText("Items available: " + product.getProductQuantity());
+                }
+            }
+        });
+
 
         // Product details below the table
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.weighty = 0.0;
         add(new JLabel("Selected Product - Details"), gbc);
 
