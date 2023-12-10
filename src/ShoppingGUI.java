@@ -119,6 +119,32 @@ public class ShoppingGUI extends JFrame {
         gbc.anchor = GridBagConstraints.LINE_END;
         add(sorButton, gbc);
 
+        sorButton.addActionListener(sortButtonActionEvent -> {
+            ArrayList<Product> products = new ArrayList<Product>();
+            for (Product product : WestminsterShoppingManager.getProducts()) {
+                products.add(product);
+            }
+            products.sort((Product p1, Product p2) -> p1.getProductID().compareTo(p2.getProductID()));
+            if (categoryComboBox.getSelectedItem().equals("Electronics")) {
+                ArrayList<Product> electronics = new ArrayList<>();
+                for (Product product : products) {
+                    if (product instanceof Electronics) {
+                        electronics.add(product);
+                    }
+                }
+                productsTable.setModel(new DefaultTableModel(convertListToData(electronics), new String[]{"Product ID", "Name", "Category", "Price(£)", "Info"}));
+            } else if (categoryComboBox.getSelectedItem().equals("Clothing")) {
+                ArrayList<Product> clothing = new ArrayList<>();
+                for (Product product : products) {
+                    if (product instanceof Clothing) {
+                        clothing.add(product);
+                    }
+                }
+                productsTable.setModel(new DefaultTableModel(convertListToData(clothing), new String[]{"Product ID", "Name", "Category", "Price(£)", "Info"}));
+            } else
+            productsTable.setModel(new DefaultTableModel(convertListToData(products), new String[]{"Product ID", "Name", "Category", "Price(£)", "Info"}));
+        });
+
         // Reset to default for the rest
         gbc.gridwidth = 3;
         gbc.gridx = 0;
