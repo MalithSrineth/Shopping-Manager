@@ -11,7 +11,8 @@ public class ShoppingGUI extends JFrame {
     private JButton shoppingCartButton, sorButton, addToCartButton;
     private JScrollPane scrollPane;
 
-    public ShoppingGUI() {
+    public ShoppingGUI(User user) {
+        
         setTitle("Westminster Shopping Centre");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridBagLayout());
@@ -242,6 +243,12 @@ public class ShoppingGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(ShoppingGUI::new);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                User user = new User();
+                new ShoppingGUI(user);
+            }
+        });
     }
 }

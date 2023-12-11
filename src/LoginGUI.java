@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
@@ -26,6 +27,8 @@ public class LoginGUI extends JFrame {
 
     private void initComponents() {
         // Initialize components
+        ArrayList<User> users = WestminsterShoppingManager.getUsers();
+
         welcomeLabel = new JLabel("Welcome to Westminster Shopping Center");
         usernameLabel = new JLabel("User Name:");
         passwordLabel = new JLabel("Password:");
@@ -53,6 +56,13 @@ public class LoginGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showSignUpDialog();
+                int lastUserIndex = users.size() - 1;
+                if (lastUserIndex >= 0) {
+                    User lastUser = users.get(lastUserIndex);
+                    String lastUsername = lastUser.getUsername();
+                    usernameField.setText(lastUsername);
+                }
+                logInPasswordField.setText("12345678");
             }
         });
 
@@ -60,8 +70,32 @@ public class LoginGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Placeholder for login logic
-                JOptionPane.showMessageDialog(LoginGUI.this,
-                        "Login Successful!");
+                String username = usernameField.getText();
+                boolean userExists = false;
+                
+                //if users = null Throw a Error Message
+                
+                
+                for (User user : users) {
+                    if (user.getUsername().equals(username)) {
+                        userExists = true;
+                        break;
+                    }
+                }
+                
+                if (userExists) {
+                    User user = WestminsterShoppingManager.getUser(username);
+                    if (Arrays.equals(user.getPassword(), logInPasswordField.getPassword())) {
+                        JOptionPane.showMessageDialog(LoginGUI.this, "Login Successful!");
+                        new ShoppingGUI(user);
+                    } else {
+                        JOptionPane.showMessageDialog(LoginGUI.this, "Invalid Password!");
+                    }
+                    
+                    
+                } else {
+                    JOptionPane.showMessageDialog(LoginGUI.this, "User Doesn't Exist!");
+                }
             }
         });
     }
@@ -270,6 +304,10 @@ public class LoginGUI extends JFrame {
 
                     JOptionPane.showMessageDialog(LoginGUI.this,
                         "Account Created!");
+
+                    for (User u : WestminsterShoppingManager.getUsers()) {
+                        System.out.println(u.getUsername());
+                    }
                 
         
                     // If the name is valid and account creation is successful, close the dialog
@@ -291,8 +329,8 @@ public class LoginGUI extends JFrame {
 
     //Another method to set input fields with random data
     private void setRandomInputFields() {
-        firstNameField.setText(getRandomString());
-        lastNameField.setText(getRandomString());
+        firstNameField.setText(getRandomName());
+        lastNameField.setText(getRandomName());
         genderField.setText(getRandomGender());
         ageField.setText(getRandomAge());
         signUpUsernameField.setText(getRandomUsername());
@@ -308,10 +346,11 @@ public class LoginGUI extends JFrame {
     }
 
 
-    private String getRandomString() {
-        // Generate and return a random string
-        String randomString = UUID.randomUUID().toString();
-        return randomString;
+    private String getRandomName() {
+        String[] names = {"John", "Emma", "Michael", "Sophia", "William", "Olivia", "James", "Ava", "Benjamin", "Isabella"};
+        Random random = new Random();
+        int index = random.nextInt(names.length);
+        return names[index];
     }
 
     private String getRandomGender() {
@@ -329,7 +368,10 @@ public class LoginGUI extends JFrame {
     }
 
     private String getRandomUsername() {
-        String username = getRandomString(); 
+        String p1 = getRandomName();
+        String p2 = getRandomName();
+        int randomNum = (int) (Math.random() * 100);
+        String username = p1 + p2 + randomNum; 
         return username;
     }
 
@@ -337,7 +379,7 @@ public class LoginGUI extends JFrame {
         String[] domains = {"gmail.com", "yahoo.com", "hotmail.com", "outlook.com"};
         Random random = new Random();
         int index = random.nextInt(domains.length);
-        String username = getRandomString().replaceAll("-", "").substring(0, 10);
+        String username = this.getRandomUsername();
         return username + "@" + domains[index];
     }
     
