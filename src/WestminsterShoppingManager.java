@@ -14,6 +14,8 @@ public class WestminsterShoppingManager implements ShoppingManager {
 
     public WestminsterShoppingManager() {
         WestminsterShoppingManager.products = new ArrayList<>(50);
+        WestminsterShoppingManager.users = new ArrayList<>();
+
         // Creating 3 Clothing objects
         Clothing clothing1 = new Clothing("C01", "T-Shirt", 19.99, 50, "M", "Blue");
         Clothing clothing2 = new Clothing("C02", "Jeans", 39.99, 30, "L", "Black");
@@ -138,7 +140,8 @@ public class WestminsterShoppingManager implements ShoppingManager {
 
     @Override
     public void viewGUI() {
-        new ShoppingGUI();
+        new LoginGUI();
+        //new ShoppingGUI();
         
     }
 
@@ -238,6 +241,25 @@ public class WestminsterShoppingManager implements ShoppingManager {
             }
         }
         return product;
+    }
+
+    public static ArrayList<User> getUsers() {
+        return users;
+    }
+
+    public static User getUser(String username) {
+        User user = null;
+        for (User u : users) {
+            if (u.getUsername().equals(username)) {
+                user = u;
+                break;
+            }
+        }
+        return user;
+    }
+
+    public static void addUser(User user) {
+        users.add(user);
     }
 
     

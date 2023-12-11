@@ -95,6 +95,14 @@ public class User {
     }
     public void setUsername(String username) {
         if (username.matches("[a-zA-Z0-9]+")) {
+            //Check if username already exists
+            for (User user : WestminsterShoppingManager.getUsers()) {
+                if (user.getUsername().equals(username) && user != this) {
+                    throw new IllegalArgumentException("Username Already Exists");
+                } else if (user.getUsername().equals(username) && user == this) {
+                    continue;
+                }
+            }
             this.username = username;
         } else {
             System.out.println("Invalid username");
@@ -121,9 +129,7 @@ public class User {
     public void setPassword(char[] password) {
         if (password.length >= 8) {
             this.password = password;
-        } else if (password.length == 0) {
-            throw new IllegalArgumentException("Password Field is Empty");
-        } else if (password.length < 8) {
+        }else if (password.length < 8) {
             throw new IllegalArgumentException("Password is too short");
         } else {
             throw new IllegalArgumentException("Invalid Password");
@@ -135,7 +141,7 @@ public class User {
         return address;
     }
     public void setAddress(String address) {
-        if (address.matches("[a-zA-Z0-9]+")) {
+        if (address.matches("[a-zA-Z0-9 !@#$%^&*()_+=\\\\-\\\\[\\\\]{}|;:'\\\",.<>/?]+")) {
             this.address = address;
         } else if (address.equals("")) {
             throw new IllegalArgumentException("Address Field is Empty");
@@ -149,7 +155,7 @@ public class User {
     }
 
     public void setCity(String city) {
-        if (city.matches("[a-zA-Z]+")) {
+        if (city.matches("[a-zA-Z ]+")) {
             this.city = city;
         } else if (city.equals("")) {
             throw new IllegalArgumentException("City Field is Empty");
@@ -163,7 +169,7 @@ public class User {
     }
 
     public void setCountry(String country) {
-        if (country.matches("[a-zA-Z]+")) {
+        if (country.matches("[a-zA-Z ]+")) {
             this.country = country;
         } else if (country.equals("")) {
             throw new IllegalArgumentException("Country Field is Empty");

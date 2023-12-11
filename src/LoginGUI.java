@@ -2,6 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.UUID;
 
 public class LoginGUI extends JFrame {
 
@@ -225,6 +228,8 @@ public class LoginGUI extends JFrame {
         gbc.gridy = 16;
         JButton createAccountButton = new JButton("Create Account");
         signUpDialog.add(createAccountButton, gbc);
+        setRandomInputFields();
+        
 
         createAccountButton.addActionListener(new ActionListener() {
             @Override
@@ -232,48 +237,184 @@ public class LoginGUI extends JFrame {
                 // Placeholder for sign up logic
                 User user = new User();
                 try {
-                    // Assume firstNameField is your JTextField for the first name input
-                    String firstName = firstNameField.getText();
-                    // Assuming 'user' is an instance of your User class
-                    user.setFirstName(firstName);
-                    // ... the rest of your account creation logic ...
+                    user.setFirstName(firstNameField.getText());
+                    user.setLastName(lastNameField.getText());
+                    user.setGender(genderField.getText());
+                    user.setAge(Integer.parseInt(ageField.getText()));
+                    user.setUsername(signUpUsernameField.getText());
+                    user.setEmail(emailField.getText());
+                    if (signUPasswordField.getPassword().length == 0) {
+                        throw new IllegalArgumentException("Password Field is Empty");
+                    } else if (reEnterPasswordField.getPassword().length == 0) {
+                        throw new IllegalArgumentException("Re-Enter Password Field is Empty");
+                    } else if (!Arrays.equals(signUPasswordField.getPassword(), reEnterPasswordField.getPassword())) {
+                        throw new IllegalArgumentException("Passwords do not Match!");                    
+                    } else {
+                        user.setPassword(signUPasswordField.getPassword());
+                    } 
+
+                    if (addressLine1Field.getText().equals("")) {
+                        throw new IllegalArgumentException("Address Line 1 Field is Empty");
+                    } else if (addressLine2Field.getText().equals("")) {
+                        user.setAddress(addressLine1Field.getText());
+                    } else {
+                        user.setAddress(addressLine1Field.getText() + ", " + addressLine2Field.getText());
+                    }
+                    
+                    user.setCity(cityField.getText());
+                    user.setCountry(countryField.getText());
+                    user.setPostalCode(Integer.parseInt(postalCodeField.getText()));
+                    user.setPhoneNumber(phoneNumberField.getText());
+
+                    WestminsterShoppingManager.addUser(user);
+
+                    JOptionPane.showMessageDialog(LoginGUI.this,
+                        "Account Created!");
+                
         
                     // If the name is valid and account creation is successful, close the dialog
                     signUpDialog.setVisible(false);
                     signUpDialog.dispose();
+                    clearInputFields();
+                    
                 } catch (IllegalArgumentException ex) {
                     // Show the dialog box with the error message
                     JOptionPane.showMessageDialog(signUpDialog, ex.getMessage(), "Input Error", JOptionPane.ERROR_MESSAGE);
                 }
-
-                //user.setFirstName(firstNameField.getText());
-                user.setLastName(lastNameField.getText());
-                user.setGender(genderField.getText());
-                user.setAge(Integer.parseInt(ageField.getText()));
-                user.setUsername(signUpUsernameField.getText());
-                user.setEmail(emailField.getText());
-                if (signUPasswordField.getPassword().equals(reEnterPasswordField.getPassword())) {
-                    user.setPassword(signUPasswordField.getPassword());
-                } else {
-                    JOptionPane.showMessageDialog(LoginGUI.this,
-                        "Passwords do not match!");
-                }
-                user.setPassword(signUPasswordField.getPassword());
-
-
-
-                JOptionPane.showMessageDialog(LoginGUI.this,
-                        "Account Created!");
-                
-                
-                signUpDialog.setVisible(false); // Hide the dialog
-                signUpDialog.dispose(); // Destroy the dialog and free resources
             }
         });
 
         signUpDialog.pack();
         signUpDialog.setLocationRelativeTo(this);
         signUpDialog.setVisible(true);
+    }
+
+    //Another method to set input fields with random data
+    private void setRandomInputFields() {
+        firstNameField.setText(getRandomString());
+        lastNameField.setText(getRandomString());
+        genderField.setText(getRandomGender());
+        ageField.setText(getRandomAge());
+        signUpUsernameField.setText(getRandomUsername());
+        emailField.setText(getRandomEmail());
+        signUPasswordField.setText("12345678");
+        reEnterPasswordField.setText("12345678");
+        addressLine1Field.setText(getRandomAddress());
+        addressLine2Field.setText(getRandomAddress());
+        cityField.setText(getRandomCity());
+        countryField.setText(getRandomCountry());
+        postalCodeField.setText(getRandomPostalCode());
+        phoneNumberField.setText(getRandomPhoneNumber());
+    }
+
+
+    private String getRandomString() {
+        // Generate and return a random string
+        String randomString = UUID.randomUUID().toString();
+        return randomString;
+    }
+
+    private String getRandomGender() {
+        String[] genders = {"Male", "Female", "Other"};
+        Random random = new Random();
+        int index = random.nextInt(genders.length);
+        return genders[index];
+    }
+
+    private String getRandomAge() {
+        Random random = new Random();
+        // Generate a random age between 18 and 100
+        int age = random.nextInt(80 - 18 + 1) + 18; 
+        return String.valueOf(age);
+    }
+
+    private String getRandomUsername() {
+        String username = getRandomString(); 
+        return username;
+    }
+
+    private String getRandomEmail() {
+        String[] domains = {"gmail.com", "yahoo.com", "hotmail.com", "outlook.com"};
+        Random random = new Random();
+        int index = random.nextInt(domains.length);
+        String username = getRandomString().replaceAll("-", "").substring(0, 10);
+        return username + "@" + domains[index];
+    }
+    
+    private String getRandomAddress() {
+        String[] streets = {"Main Street", "Park Avenue", "Oak Street", "Elm Street", "Maple Avenue"};
+        String[] cities = {"New York", "Los Angeles", "Chicago", "Houston", "Phoenix"};
+        String[] states = {"New York", "California", "Illinois", "Texas", "Arizona"};
+        Random random = new Random();
+        int streetIndex = random.nextInt(streets.length);
+        int cityIndex = random.nextInt(cities.length);
+        int stateIndex = random.nextInt(states.length);
+        int houseNumber = random.nextInt(100) + 1;
+        return houseNumber + " " + streets[streetIndex] + ", " + cities[cityIndex] + ", " + states[stateIndex];
+    }
+
+    private String getRandomCity() {
+        String[] cities = {"New York", "Los Angeles", "Chicago", "Houston", "Phoenix"};
+        Random random = new Random();
+        int index = random.nextInt(cities.length);
+        return cities[index];
+    }
+
+    private String getRandomCountry() {
+        String[] countries = {"United States", "Canada", "United Kingdom", "Germany", "France", "Australia", "Japan", "China", "India"};
+        Random random = new Random();
+        int index = random.nextInt(countries.length);
+        return countries[index];
+    }
+
+    private String getRandomPostalCode() {
+        Random random = new Random();
+        int postalCode = random.nextInt(90000) + 10000;
+        return String.valueOf(postalCode);
+    }
+
+    private String getRandomPhoneNumber() {
+        Random random = new Random();
+        StringBuilder phoneNumber = new StringBuilder();
+        for (int i = 0; i < 10; i++) {
+            int digit = random.nextInt(10);
+            phoneNumber.append(digit);
+        }
+        return phoneNumber.toString();
+    }
+
+    private void setInputFields() {
+        firstNameField.setText("Malith");
+        lastNameField.setText("Amarawickrama");
+        genderField.setText("Male");
+        ageField.setText("23");
+        signUpUsernameField.setText("malithsrineth");
+        emailField.setText("malithsrineth@gmail.com");
+        signUPasswordField.setText("12345678");
+        reEnterPasswordField.setText("12345678");
+        addressLine1Field.setText("No 1/3, Maitipe 2nd Lane");
+        addressLine2Field.setText("Ambalanwatta");
+        cityField.setText("Galle");
+        countryField.setText("Sri Lanka");
+        postalCodeField.setText("80000");
+        phoneNumberField.setText("0766201619");
+    }
+
+    private void clearInputFields() {
+        firstNameField.setText("");
+        lastNameField.setText("");
+        genderField.setText("");
+        ageField.setText("");
+        signUpUsernameField.setText("");
+        emailField.setText("");
+        signUPasswordField.setText("");
+        reEnterPasswordField.setText("");
+        addressLine1Field.setText("");
+        addressLine2Field.setText("");
+        cityField.setText("");
+        countryField.setText("");
+        postalCodeField.setText("");
+        phoneNumberField.setText("");
     }
 
     public static void main(String[] args) {
