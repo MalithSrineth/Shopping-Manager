@@ -1,7 +1,12 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShoppingCart {
     private List<Product> products;
+
+    public ShoppingCart() {
+        this.products = new ArrayList<>();
+    }
 
     public ShoppingCart(List<Product> products) {
         this.products = products;

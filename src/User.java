@@ -14,6 +14,7 @@ public class User {
     private ShoppingCart shoppingCart;
 
     public User() {
+        this.shoppingCart = new ShoppingCart();
     }
 
     public User(String firstName, String lastName, String gender, int age, String username, String email, char[] password, String address, String city, String country, int postalCode, String phoneNumber) {
@@ -29,7 +30,7 @@ public class User {
         this.country = country;
         this.postalCode = postalCode;
         this.phoneNumber = phoneNumber;
-        this.shoppingCart = new ShoppingCart(null);
+        
     }
 
 

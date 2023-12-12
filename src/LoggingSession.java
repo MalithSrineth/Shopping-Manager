@@ -32,7 +32,7 @@ public class LoggingSession {
 
     public void setSessionID() {
         getLastSessionID();
-        this.sessionID = getLastSessionID() + 1;
+        this.sessionID = (getLastSessionID() + 1);
         setLastSessionID (this.sessionID);
     }
 

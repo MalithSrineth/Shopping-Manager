@@ -72,7 +72,7 @@ public class LoginGUI extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Placeholder for login logic
+                
                 String username = usernameField.getText();
                 boolean userExists = false;
                 

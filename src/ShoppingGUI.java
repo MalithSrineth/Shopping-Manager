@@ -7,7 +7,7 @@ public class ShoppingGUI extends JFrame {
 
     private JComboBox<String> categoryComboBox;
     private JTable productsTable;
-    private JLabel productIdLabel, categoryLabel, nameLabel, sizeLabel, colorLabel, availableLabel, productCategoryLabel;
+    private JLabel productIdLabel, categoryLabel, nameLabel, customitemLabel_1, customitemLabel_2, availableLabel, productCategoryLabel;
     private JButton shoppingCartButton, sortButton, addToCartButton;
     private JScrollPane scrollPane;
 
@@ -46,13 +46,15 @@ public class ShoppingGUI extends JFrame {
         DefaultTableModel model = new DefaultTableModel(convertListToData(products), columnNames);
         productsTable = new JTable(model);
         scrollPane = new JScrollPane(productsTable);
+        
+        
 
         // Labels for product details
         productIdLabel = new JLabel();
         categoryLabel = new JLabel();
         nameLabel = new JLabel();
-        sizeLabel = new JLabel();
-        colorLabel = new JLabel();
+        customitemLabel_1 = new JLabel();
+        customitemLabel_2 = new JLabel();
         availableLabel = new JLabel();
 
         // Button to add product to the shopping cart
@@ -168,14 +170,14 @@ public class ShoppingGUI extends JFrame {
                     categoryLabel.setText("Category: " + product.getClass().getName());
                     nameLabel.setText("Name: " + product.getProductName());
                     if (product instanceof Electronics) {
-                        sizeLabel.setText("Brand Name: " + ((Electronics) product).getBrandName());
-                        colorLabel.setText("Warranty Period: " + ((Electronics) product).getWarrantyPeriod());
+                        customitemLabel_1.setText("Brand Name: " + ((Electronics) product).getBrandName());
+                        customitemLabel_2.setText("Warranty Period: " + ((Electronics) product).getWarrantyPeriod());
                     } else if (product instanceof Clothing) {
-                        sizeLabel.setText("Size: " + ((Clothing) product).getSize());
-                        colorLabel.setText("Color: " + ((Clothing) product).getColor());
+                        customitemLabel_1.setText("Size: " + ((Clothing) product).getSize());
+                        customitemLabel_2.setText("Color: " + ((Clothing) product).getColor());
                     } else {
-                        sizeLabel.setText("");
-                        colorLabel.setText("");
+                        customitemLabel_1.setText("");
+                        customitemLabel_2.setText("");
                     }
                     availableLabel.setText("Items available: " + product.getProductQuantity());
                 }
@@ -202,11 +204,11 @@ public class ShoppingGUI extends JFrame {
 
         // Size
         gbc.gridy++;
-        add(sizeLabel, gbc);
+        add(customitemLabel_1, gbc);
 
         // Color
         gbc.gridy++;
-        add(colorLabel, gbc);
+        add(customitemLabel_2, gbc);
 
         // Items available
         gbc.gridy++;
@@ -222,18 +224,33 @@ public class ShoppingGUI extends JFrame {
             int row = productsTable.getSelectedRow();
             if (row >= 0) {
                 String productID = (String) productsTable.getValueAt(row, 0);
-                int quantity = (int) productsTable.getValueAt(row, 3);
                 Product product = WestminsterShoppingManager.getProduct(productID);
+                int quantity = product.getProductQuantity();
                 loggingSession.getShoppingCart().addProduct(product);
-                quantity--;
+                product.setProductQuantity(--quantity);
+                productsTable.clearSelection();
+                clearDetails();
+                ArrayList<Product> products = WestminsterShoppingManager.getProducts();
+                for (Product p : products) {
+                    System.out.println(p.getProductQuantity());
+                }
                 
 
-                
                 JOptionPane.showMessageDialog(null, "Product added to cart");
             } else {
                 JOptionPane.showMessageDialog(null, "Please select a product");
             }
         });
+    }
+
+    private void clearDetails() {
+        productIdLabel.setText("");
+        categoryLabel.setText("");
+        nameLabel.setText("");
+        customitemLabel_1.setText("");
+        customitemLabel_2.setText("");
+        availableLabel.setText("");
+
     }
 
     private Object[][] convertListToData(ArrayList<Product> productList) {

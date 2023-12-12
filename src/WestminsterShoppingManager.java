@@ -234,6 +234,10 @@ public class WestminsterShoppingManager implements ShoppingManager {
         return products;
     }
 
+    public static void setProducts(ArrayList<Product> products) {
+        WestminsterShoppingManager.products = products;
+    }
+
     public static Product getProduct(String productID) {
         Product product = null;
         for (Product p : products) {
