@@ -8,17 +8,17 @@ public class ShoppingGUI extends JFrame {
     private JComboBox<String> categoryComboBox;
     private JTable productsTable;
     private JLabel productIdLabel, categoryLabel, nameLabel, sizeLabel, colorLabel, availableLabel, productCategoryLabel;
-    private JButton shoppingCartButton, sorButton, addToCartButton;
+    private JButton shoppingCartButton, sortButton, addToCartButton;
     private JScrollPane scrollPane;
 
-    public ShoppingGUI(User user) {
+    public ShoppingGUI(LoggingSession loggingSession) {
         
         setTitle("Westminster Shopping Centre");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridBagLayout());
 
         initComponents();
-        layoutComponents();
+        layoutComponents(loggingSession);
 
         pack();
         setLocationRelativeTo(null); // Center on screen
@@ -36,7 +36,7 @@ public class ShoppingGUI extends JFrame {
         shoppingCartButton = new JButton("Shopping Cart");
 
         // Sort button
-        sorButton = new JButton("Sort");
+        sortButton = new JButton("Sort");
 
         // Table for product listings
         String[] columnNames = {"Product ID", "Name", "Category", "Price(£)", "Info"};
@@ -59,7 +59,7 @@ public class ShoppingGUI extends JFrame {
         addToCartButton = new JButton("Add to Shopping Cart");
     }
 
-    private void layoutComponents() {
+    private void layoutComponents(LoggingSession loggingSession) {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -118,9 +118,9 @@ public class ShoppingGUI extends JFrame {
         gbc.weightx = 1;
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.LINE_END;
-        add(sorButton, gbc);
+        add(sortButton, gbc);
 
-        sorButton.addActionListener(sortButtonActionEvent -> {
+        sortButton.addActionListener(sortButtonActionEvent -> {
             ArrayList<Product> products = new ArrayList<Product>();
             for (Product product : WestminsterShoppingManager.getProducts()) {
                 products.add(product);
@@ -217,6 +217,23 @@ public class ShoppingGUI extends JFrame {
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.CENTER;
         add(addToCartButton, gbc);
+
+        addToCartButton.addActionListener(addToCartButtonActionEvent -> {
+            int row = productsTable.getSelectedRow();
+            if (row >= 0) {
+                String productID = (String) productsTable.getValueAt(row, 0);
+                int quantity = (int) productsTable.getValueAt(row, 3);
+                Product product = WestminsterShoppingManager.getProduct(productID);
+                loggingSession.getShoppingCart().addProduct(product);
+                quantity--;
+                
+
+                
+                JOptionPane.showMessageDialog(null, "Product added to cart");
+            } else {
+                JOptionPane.showMessageDialog(null, "Please select a product");
+            }
+        });
     }
 
     private Object[][] convertListToData(ArrayList<Product> productList) {
@@ -238,17 +255,17 @@ public class ShoppingGUI extends JFrame {
         return data;
     }
 
-    public void run () {
-        SwingUtilities.invokeLater(ShoppingGUI::new);
-    }
+    // public void run () {
+    //     SwingUtilities.invokeLater(ShoppingGUI::new);
+    // }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                User user = new User();
-                new ShoppingGUI(user);
-            }
-        });
-    }
+    // public static void main(String[] args) {
+    //     SwingUtilities.invokeLater(new Runnable() {
+    //         @Override
+    //         public void run() {
+    //             User user = new User();
+    //             new ShoppingGUI(user);
+    //         }
+    //     });
+    // }
 }

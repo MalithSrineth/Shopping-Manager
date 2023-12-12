@@ -2,11 +2,9 @@ import java.util.List;
 
 public class ShoppingCart {
     private List<Product> products;
-    private User user;
 
-    public ShoppingCart(List<Product> products, User user) {
+    public ShoppingCart(List<Product> products) {
         this.products = products;
-        this.user = user;
     }
 
     public void addProduct(Product product) {
@@ -31,12 +29,5 @@ public class ShoppingCart {
     }
     public void setProducts(List<Product> products) {
         this.products = products;
-    }
-
-    public User getUser() {
-        return user;
-    }
-    public void setUser(User user) {
-        this.user = user;
     }
 }

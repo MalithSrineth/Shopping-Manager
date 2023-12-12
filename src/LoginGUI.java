@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -28,6 +30,7 @@ public class LoginGUI extends JFrame {
     private void initComponents() {
         // Initialize components
         ArrayList<User> users = WestminsterShoppingManager.getUsers();
+        
 
         welcomeLabel = new JLabel("Welcome to Westminster Shopping Center");
         usernameLabel = new JLabel("User Name:");
@@ -86,8 +89,9 @@ public class LoginGUI extends JFrame {
                 if (userExists) {
                     User user = WestminsterShoppingManager.getUser(username);
                     if (Arrays.equals(user.getPassword(), logInPasswordField.getPassword())) {
+                        LoggingSession loggingSession = new LoggingSession(user);
                         JOptionPane.showMessageDialog(LoginGUI.this, "Login Successful!");
-                        new ShoppingGUI(user);
+                        new ShoppingGUI(loggingSession);
                     } else {
                         JOptionPane.showMessageDialog(LoginGUI.this, "Invalid Password!");
                     }

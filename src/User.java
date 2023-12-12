@@ -11,6 +11,7 @@ public class User {
     private String country;
     private int postalCode;
     private String phoneNumber;
+    private ShoppingCart shoppingCart;
 
     public User() {
     }
@@ -28,6 +29,7 @@ public class User {
         this.country = country;
         this.postalCode = postalCode;
         this.phoneNumber = phoneNumber;
+        this.shoppingCart = new ShoppingCart(null);
     }
 
 
@@ -201,6 +203,14 @@ public class User {
         } else {
             throw new IllegalArgumentException("Invalid Phone Number");
         }
+    }
+
+    public ShoppingCart getShoppingCart() {
+        return shoppingCart;
+    }
+
+    public void setShoppingCart(ShoppingCart shoppingCart) {
+        this.shoppingCart = shoppingCart;
     }
 
     

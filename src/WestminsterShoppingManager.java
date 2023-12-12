@@ -200,6 +200,8 @@ public class WestminsterShoppingManager implements ShoppingManager {
         System.out.println("Products are loaded successfully");
     }
 
+    
+
     public static int getVerifiedIntInput() {
         int inputInt = -1;
         do {
