@@ -226,19 +226,25 @@ public class ShoppingGUI extends JFrame {
                 String productID = (String) productsTable.getValueAt(row, 0);
                 Product product = WestminsterShoppingManager.getProduct(productID);
                 int quantity = product.getProductQuantity();
-                loggingSession.getShoppingCart().addProduct(product);
-                product.setProductQuantity(--quantity);
-                productsTable.clearSelection();
-                clearDetails();
+                if (quantity == 0) {
+                    JOptionPane.showMessageDialog(null, "Product is Out of Stock");
+                    return;
+
+                } else {
+                    loggingSession.getShoppingCart().addProduct(product);
+                    product.setProductQuantity(--quantity);
+                    productsTable.clearSelection();
+                    clearDetails();
+                    JOptionPane.showMessageDialog(null, "Product Added to Cart");                    
+                }
+                
                 ArrayList<Product> products = WestminsterShoppingManager.getProducts();
                 for (Product p : products) {
                     System.out.println(p.getProductQuantity());
                 }
-                
-
-                JOptionPane.showMessageDialog(null, "Product added to cart");
+        
             } else {
-                JOptionPane.showMessageDialog(null, "Please select a product");
+                JOptionPane.showMessageDialog(null, "Please Select a Product");
             }
         });
     }
