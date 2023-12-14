@@ -1,5 +1,10 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class ShoppingCartGUI extends JFrame {
     private JTable productsTable;
@@ -7,23 +12,26 @@ public class ShoppingCartGUI extends JFrame {
     private JLabel discountLabel, discountValue;
     private JLabel finalTotalLabel, finalTotalValue;
     private JButton buyNowButton, shopMoreButton;
+    private JScrollPane scrollPane;
 
-    public ShoppingCartGUI() {
+    public ShoppingCartGUI(LoggingSession loggingSession) {
         setTitle("Shopping Cart");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridBagLayout());
-        initComponents();
+        initComponents(loggingSession);
         layoutComponents();
         pack();
         setLocationRelativeTo(null); // Center on screen
         setVisible(true);
     }
 
-    private void initComponents() {
+    private void initComponents(LoggingSession loggingSession) {
         // Table for shopping cart items
+        Map<Product, Integer> shoppingItems = loggingSession.getShoppingCart().getProducts();
         String[] columnNames = {"Product", "Quantity", "Price"};
-        Object[][] data = {}; // Placeholder for actual data
-        productsTable = new JTable(data, columnNames);
+        DefaultTableModel model = new DefaultTableModel(convertListToData(shoppingItems), columnNames);
+        productsTable = new JTable(model);
+        scrollPane = new JScrollPane(productsTable);
 
         // Labels for totals and discount
         totalLabel = new JLabel("Total:");
@@ -52,7 +60,7 @@ public class ShoppingCartGUI extends JFrame {
         gbc.gridy = 0;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        add(new JScrollPane(productsTable), gbc);
+        add(scrollPane, gbc);
     
         // Panel for labels and values with GridLayout
         gbc.gridy++;
@@ -80,12 +88,15 @@ public class ShoppingCartGUI extends JFrame {
         add(buttonPanel, gbc);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new ShoppingCartGUI();
-            }
-        });
+    private Object[][] convertListToData(Map<Product, Integer> shoppingItems) {
+        Object[][] data = new Object[shoppingItems.size()][3];
+        int i = 0;
+        for (Product product : shoppingItems.keySet()) {
+            data[i][0] = product.getProductName();
+            data[i][1] = shoppingItems.get(product);
+            data[i][2] = "£" + product.getProductPrice();
+            i++;
+        }
+        return data;
     }
 }

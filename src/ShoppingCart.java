@@ -1,38 +1,53 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ShoppingCart {
-    private List<Product> products;
+    private Map<Product, Integer> products;
 
     public ShoppingCart() {
-        this.products = new ArrayList<>();
+        this.products = new HashMap<>();
     }
 
-    public ShoppingCart(List<Product> products) {
+    public ShoppingCart(Map<Product, Integer> products) {
         this.products = products;
     }
 
     public void addProduct(Product product) {
-        products.add(product);
+        if (products.containsKey(product)) {
+            products.put(product, products.get(product) + 1);
+        } else {
+            products.put(product, 1);
+        }
     }
+
     public void removeProduct(Product product) {
-        products.remove(product);
+        if (products.containsKey(product)) {
+            int quantity = products.get(product);
+            if (quantity > 1) {
+                products.put(product, quantity - 1);
+            } else {
+                products.remove(product);
+            }
+        }
     }
+
     public void emptyCart() {
         products.clear();
     }
+
     public double calculateTotal() {
         double total = 0;
-        for (Product product : products) {
-            total += product.getProductPrice();
+        for (Product product : products.keySet()) {
+            total += product.getProductPrice() * products.get(product);
         }
         return total;
     }
 
-    public List<Product> getProducts() {
+    public Map<Product, Integer> getProducts() {
         return products;
     }
-    public void setProducts(List<Product> products) {
+    
+    public void setProducts(Map<Product, Integer> products) {
         this.products = products;
     }
 }

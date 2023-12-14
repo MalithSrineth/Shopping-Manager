@@ -31,7 +31,7 @@ public class User {
         this.postalCode = postalCode;
         this.phoneNumber = phoneNumber;
         
-    }
+    }    
 
 
     public String getFirstName() {

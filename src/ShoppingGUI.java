@@ -114,6 +114,10 @@ public class ShoppingGUI extends JFrame {
         gbc.anchor = GridBagConstraints.LINE_END;
         add(shoppingCartButton, gbc);
 
+        shoppingCartButton.addActionListener(shoppingCartButtonActionEvent -> {
+            new ShoppingCartGUI(loggingSession);
+        });
+
         // Sort button at the top-right
         gbc.gridx = 2;
         gbc.gridy = 1;
