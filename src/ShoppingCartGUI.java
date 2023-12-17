@@ -4,6 +4,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ShoppingCartGUI extends JFrame {
@@ -101,7 +102,8 @@ public class ShoppingCartGUI extends JFrame {
     }
 
     public void updateCart(LoggingSession loggingSession) {
-        Map<Product, Integer> shoppingItems = loggingSession.getShoppingCart().getProducts();
+        Map<Product, Integer> shoppingItems = new LinkedHashMap<>();
+        shoppingItems = loggingSession.getShoppingCart().getProducts();
         DefaultTableModel model = (DefaultTableModel) productsTable.getModel();
         model.setDataVector(convertListToData(shoppingItems), new String[] {"Product", "Quantity", "Price"});
         productsTable.setModel(model);

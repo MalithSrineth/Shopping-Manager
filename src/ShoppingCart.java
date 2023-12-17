@@ -1,11 +1,11 @@
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ShoppingCart {
     private Map<Product, Integer> products;
 
     public ShoppingCart() {
-        this.products = new HashMap<>();
+        this.products = new LinkedHashMap<>();
     }
 
     public ShoppingCart(Map<Product, Integer> products) {
