@@ -115,8 +115,20 @@ public class ShoppingGUI extends JFrame {
         add(shoppingCartButton, gbc);
 
         shoppingCartButton.addActionListener(shoppingCartButtonActionEvent -> {
-            new ShoppingCartGUI(loggingSession);
+            if (loggingSession.getShoppingCart().getProducts().size() == 0) {
+                JOptionPane.showMessageDialog(null, "Shopping Cart is Empty");
+                return;
+            } else {
+                ShoppingCartGUI shoppingCartGUI = getOpenShoppingCartGUI();
+                if (shoppingCartGUI == null) {
+                    shoppingCartGUI = new ShoppingCartGUI(loggingSession);
+                } else {
+                    shoppingCartGUI.updateCart(loggingSession);
+                }
+            }
         });
+
+
 
         // Sort button at the top-right
         gbc.gridx = 2;
@@ -239,7 +251,11 @@ public class ShoppingGUI extends JFrame {
                     product.setProductQuantity(--quantity);
                     productsTable.clearSelection();
                     clearDetails();
-                    JOptionPane.showMessageDialog(null, "Product Added to Cart");                    
+                    JOptionPane.showMessageDialog(null, "Product Added to Cart");
+                    ShoppingCartGUI shoppingCartGUI = getOpenShoppingCartGUI();
+                    if (shoppingCartGUI != null) {
+                        shoppingCartGUI.updateCart(loggingSession);
+                    }                  
                 }
                 
                 ArrayList<Product> products = WestminsterShoppingManager.getProducts();
@@ -252,6 +268,7 @@ public class ShoppingGUI extends JFrame {
             }
         });
     }
+
 
     private void clearDetails() {
         productIdLabel.setText("");
@@ -280,6 +297,15 @@ public class ShoppingGUI extends JFrame {
             }
         }
         return data;
+    }
+
+    private ShoppingCartGUI getOpenShoppingCartGUI() {
+        for (Window window : Window.getWindows()) {
+            if (window instanceof ShoppingCartGUI) {
+                return (ShoppingCartGUI) window;
+            }
+        }
+        return null;
     }
 
     // public void run () {

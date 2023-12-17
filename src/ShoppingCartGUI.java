@@ -99,4 +99,15 @@ public class ShoppingCartGUI extends JFrame {
         }
         return data;
     }
+
+    public void updateCart(LoggingSession loggingSession) {
+        Map<Product, Integer> shoppingItems = loggingSession.getShoppingCart().getProducts();
+        DefaultTableModel model = (DefaultTableModel) productsTable.getModel();
+        model.setDataVector(convertListToData(shoppingItems), new String[] {"Product", "Quantity", "Price"});
+        productsTable.setModel(model);
+        // totalValue.setText("£" + String.format("%.2f", loggingSession.getShoppingCart().calculateTotal()));
+        // discountValue.setText("£" + String.format("%.2f", loggingSession.getShoppingCart().calculateDiscount()));
+        // finalTotalValue.setText("£" + String.format("%.2f", loggingSession.getShoppingCart().calculateFinalTotal()));
+    }
+ 
 }
