@@ -122,9 +122,10 @@ public class ShoppingGUI extends JFrame {
                 ShoppingCartGUI shoppingCartGUI = getOpenShoppingCartGUI();
                 if (shoppingCartGUI == null) {
                     shoppingCartGUI = new ShoppingCartGUI(loggingSession);
-                } else {
-                    shoppingCartGUI.updateCart(loggingSession);
-                }
+                } 
+                // else {
+                //     shoppingCartGUI.updateCart(loggingSession);
+                // }
             }
         });
 
@@ -255,7 +256,8 @@ public class ShoppingGUI extends JFrame {
                     ShoppingCartGUI shoppingCartGUI = getOpenShoppingCartGUI();
                     if (shoppingCartGUI != null) {
                         shoppingCartGUI.updateCart(loggingSession);
-                    }                  
+                        shoppingCartGUI.updateTotals(loggingSession);
+                    }       
                 }
                 
                 ArrayList<Product> products = WestminsterShoppingManager.getProducts();

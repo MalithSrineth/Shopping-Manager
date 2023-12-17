@@ -3,6 +3,7 @@ import java.util.Map;
 
 public class ShoppingCart {
     private Map<Product, Integer> products;
+    private double total;
 
     public ShoppingCart() {
         this.products = new LinkedHashMap<>();
@@ -18,6 +19,8 @@ public class ShoppingCart {
         } else {
             products.put(product, 1);
         }
+
+        setTotal();
     }
 
     public void removeProduct(Product product) {
@@ -35,13 +38,13 @@ public class ShoppingCart {
         products.clear();
     }
 
-    public double calculateTotal() {
-        double total = 0;
-        for (Product product : products.keySet()) {
-            total += product.getProductPrice() * products.get(product);
-        }
-        return total;
-    }
+    // public double calculateTotal() {
+    //     double total = 0;
+    //     for (Product product : products.keySet()) {
+    //         total += product.getProductPrice() * products.get(product);
+    //     }
+    //     return total;
+    // }
 
     public Map<Product, Integer> getProducts() {
         return products;
@@ -50,4 +53,17 @@ public class ShoppingCart {
     public void setProducts(Map<Product, Integer> products) {
         this.products = products;
     }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal() {
+        double total = 0;
+        for (Product product : products.keySet()) {
+            total += product.getProductPrice() * products.get(product);
+        }
+        this.total = total;
+    }
+
 }

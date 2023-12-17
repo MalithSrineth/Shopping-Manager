@@ -47,9 +47,13 @@ public class ShoppingCartGUI extends JFrame {
         discountLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         finalTotalLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
+        // Setting Values for totals
+        updateTotals(loggingSession);
+
         // Buttons
         buyNowButton = new JButton("Buy Now");
         shopMoreButton = new JButton("Shop More");
+
     }
 
     private void layoutComponents() {
@@ -103,13 +107,18 @@ public class ShoppingCartGUI extends JFrame {
 
     public void updateCart(LoggingSession loggingSession) {
         Map<Product, Integer> shoppingItems = new LinkedHashMap<>();
-        shoppingItems = loggingSession.getShoppingCart().getProducts();
+        shoppingItems =loggingSession.getShoppingCart().getProducts();
         DefaultTableModel model = (DefaultTableModel) productsTable.getModel();
         model.setDataVector(convertListToData(shoppingItems), new String[] {"Product", "Quantity", "Price"});
         productsTable.setModel(model);
         // totalValue.setText("£" + String.format("%.2f", loggingSession.getShoppingCart().calculateTotal()));
         // discountValue.setText("£" + String.format("%.2f", loggingSession.getShoppingCart().calculateDiscount()));
         // finalTotalValue.setText("£" + String.format("%.2f", loggingSession.getShoppingCart().calculateFinalTotal()));
+    }
+
+    public void updateTotals(LoggingSession loggingSession) {
+        double total = loggingSession.getShoppingCart().getTotal();
+        totalValue.setText(String.format("%.2f", total));
     }
  
 }
