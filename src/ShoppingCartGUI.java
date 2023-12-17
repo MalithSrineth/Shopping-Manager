@@ -118,13 +118,20 @@ public class ShoppingCartGUI extends JFrame {
 
     public void updateTotals(LoggingSession loggingSession) {
         double total = loggingSession.getShoppingCart().getTotal();
-        totalValue.setText(String.format("%.2f", total));
+        totalValue.setText("£" + String.format("%.2f", total));
+
+        double discount = loggingSession.getShoppingCart().getDiscount();
         if (loggingSession.getUser().getPurchases().length == 0) {
-            double discount = loggingSession.getShoppingCart().getDiscount();
             discount = total * 10 / 100;
             loggingSession.getShoppingCart().setDiscount(discount);
-            discountValue.setText(String.format("%.2f", discount));
+            discountValue.setText("£" + String.format("%.2f", discount));
         }
+        else {
+            discountValue.setText("£" + String.format("%.2f", discount));
+        }
+
+        double finalTotal = total - discount;
+        finalTotalValue.setText("£" + String.format("%.2f", finalTotal));
     }
  
 }
