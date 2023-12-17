@@ -1,5 +1,7 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.crypto.Data;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -10,6 +12,7 @@ public class ShoppingGUI extends JFrame {
     private JLabel productIdLabel, categoryLabel, nameLabel, customitemLabel_1, customitemLabel_2, availableLabel, productCategoryLabel;
     private JButton shoppingCartButton, sortButton, addToCartButton;
     private JScrollPane scrollPane;
+
 
     public ShoppingGUI(LoggingSession loggingSession) {
         

@@ -12,9 +12,12 @@ public class User {
     private int postalCode;
     private String phoneNumber;
     private ShoppingCart shoppingCart;
+    private Purchase[] purchases;
+
 
     public User() {
         this.shoppingCart = new ShoppingCart();
+        this.purchases = new Purchase[0];
     }
 
     public User(String firstName, String lastName, String gender, int age, String username, String email, char[] password, String address, String city, String country, int postalCode, String phoneNumber) {
@@ -212,6 +215,14 @@ public class User {
 
     public void setShoppingCart(ShoppingCart shoppingCart) {
         this.shoppingCart = shoppingCart;
+    }
+
+    public Purchase[] getPurchases() {
+        return purchases;
+    }
+
+    public void setPurchases(Purchase[] purchases) {
+        this.purchases = purchases;
     }
 
     

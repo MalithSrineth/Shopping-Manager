@@ -4,9 +4,12 @@ import java.util.Map;
 public class ShoppingCart {
     private Map<Product, Integer> products;
     private double total;
+    private double discount;
 
     public ShoppingCart() {
         this.products = new LinkedHashMap<>();
+        this.total = 0;
+        this.discount = 0;
     }
 
     public ShoppingCart(Map<Product, Integer> products) {
@@ -64,6 +67,14 @@ public class ShoppingCart {
             total += product.getProductPrice() * products.get(product);
         }
         this.total = total;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
     }
 
 }
