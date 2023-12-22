@@ -1,7 +1,8 @@
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.io.Serializable;
 
-public class LoggingSession {
+public class LoggingSession implements Serializable{
     private static int lastSessionID = 0;
     private int sessionID;
     private User user;

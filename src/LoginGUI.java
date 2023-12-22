@@ -15,6 +15,7 @@ public class LoginGUI extends JFrame {
     private JPasswordField logInPasswordField, signUPasswordField, reEnterPasswordField;
     private JButton loginButton, signUpButton;
     private JLabel welcomeLabel, usernameLabel, passwordLabel;
+    
 
     public LoginGUI() {
         setTitle("Westminster Shopping Center Login");
@@ -305,6 +306,7 @@ public class LoginGUI extends JFrame {
                     user.setPhoneNumber(phoneNumberField.getText());
 
                     WestminsterShoppingManager.addUser(user);
+                    WestminsterShoppingManager.saveUsers();
 
                     JOptionPane.showMessageDialog(LoginGUI.this,
                         "Account Created!");

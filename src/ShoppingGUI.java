@@ -9,7 +9,7 @@ public class ShoppingGUI extends JFrame {
 
     private JComboBox<String> categoryComboBox;
     private JTable productsTable;
-    private JLabel productIdLabel, categoryLabel, nameLabel, customitemLabel_1, customitemLabel_2, availableLabel, productCategoryLabel;
+    private JLabel productIdLabel, categoryLabel, nameLabel, customitemLabel_1, customitemLabel_2, availableLabel, productCategoryLabel, detailsJLabel;
     private JButton shoppingCartButton, sortButton, addToCartButton;
     private JScrollPane scrollPane;
 
@@ -48,11 +48,14 @@ public class ShoppingGUI extends JFrame {
         ArrayList<Product> products = WestminsterShoppingManager.getProducts();
         DefaultTableModel model = new DefaultTableModel(convertListToData(products), columnNames);
         productsTable = new JTable(model);
+        productsTable.isCellEditable(0, 0);
+        
         scrollPane = new JScrollPane(productsTable);
         
         
 
         // Labels for product details
+        detailsJLabel = new JLabel("Select a Product to View Details");
         productIdLabel = new JLabel();
         categoryLabel = new JLabel();
         nameLabel = new JLabel();
@@ -186,6 +189,7 @@ public class ShoppingGUI extends JFrame {
                 if (row >= 0 && col >= 0) {
                     String productID = (String) productsTable.getValueAt(row, 0);
                     Product product = WestminsterShoppingManager.getProduct(productID);
+                    detailsJLabel.setText("Selected Product - Details");
                     productIdLabel.setText("Product ID: " + product.getProductID());
                     categoryLabel.setText("Category: " + product.getClass().getName());
                     nameLabel.setText("Name: " + product.getProductName());
@@ -208,7 +212,7 @@ public class ShoppingGUI extends JFrame {
         // Product details below the table
         gbc.gridy = 3;
         gbc.weighty = 0.0;
-        add(new JLabel("Selected Product - Details"), gbc);
+        add(detailsJLabel, gbc);
 
         // Product ID
         gbc.gridy++;
@@ -254,6 +258,7 @@ public class ShoppingGUI extends JFrame {
                     loggingSession.getShoppingCart().addProduct(product);
                     product.setProductQuantity(--quantity);
                     productsTable.clearSelection();
+                    detailsJLabel.setText("Select a Product to View Details");
                     clearDetails();
                     JOptionPane.showMessageDialog(null, "Product Added to Cart");
                     ShoppingCartGUI shoppingCartGUI = getOpenShoppingCartGUI();

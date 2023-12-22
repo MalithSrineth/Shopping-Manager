@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class ShoppingCart {
+public class ShoppingCart implements Serializable{
     private Map<Product, Integer> products;
     private double total;
     private double discount;
@@ -24,7 +25,7 @@ public class ShoppingCart {
         }
 
         setTotal();
-    }
+    } 
 
     public void removeProduct(Product product) {
         if (products.containsKey(product)) {

@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ShoppingCartGUI extends JFrame {
-    private JTable productsTable;
+    private JTable cartTable;
     private JLabel totalLabel, totalValue;
     private JLabel discountLabel, discountValue;
     private JLabel finalTotalLabel, finalTotalValue;
@@ -21,9 +21,12 @@ public class ShoppingCartGUI extends JFrame {
         setLayout(new GridBagLayout());
         initComponents(loggingSession);
         layoutComponents();
+        setMinimumSize(new Dimension(400, 250));
+        setMaximumSize(new Dimension(400, 500));
         pack();
         setLocationRelativeTo(null); // Center on screen
         setVisible(true);
+        
     }
 
     private void initComponents(LoggingSession loggingSession) {
@@ -31,8 +34,8 @@ public class ShoppingCartGUI extends JFrame {
         Map<Product, Integer> shoppingItems = loggingSession.getShoppingCart().getProducts();
         String[] columnNames = {"Product", "Quantity", "Price"};
         DefaultTableModel model = new DefaultTableModel(convertListToData(shoppingItems), columnNames);
-        productsTable = new JTable(model);
-        scrollPane = new JScrollPane(productsTable);
+        cartTable = new JTable(model);
+        scrollPane = new JScrollPane(cartTable);
 
         // Labels for totals and discount
         totalLabel = new JLabel("Total:");
@@ -64,13 +67,20 @@ public class ShoppingCartGUI extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
         add(scrollPane, gbc);
+
+        // Adjust the height of the table according to its row count
+        adjustTableHeight(cartTable, scrollPane);
+        
     
         // Panel for labels and values with GridLayout
         gbc.gridy++;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
+        gbc.weighty = 0.0;
         gbc.fill = GridBagConstraints.NONE; // Change fill to NONE for alignment purposes
         gbc.anchor = GridBagConstraints.LINE_END; // Align to the end of the line (right side)
         JPanel labelsPanel = new JPanel(new GridLayout(3, 2, 10, 4)); // 3 rows, 2 cols, hgap, vgap
@@ -108,9 +118,13 @@ public class ShoppingCartGUI extends JFrame {
     public void updateCart(LoggingSession loggingSession) {
         Map<Product, Integer> shoppingItems = new LinkedHashMap<>();
         shoppingItems =loggingSession.getShoppingCart().getProducts();
-        DefaultTableModel model = (DefaultTableModel) productsTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) cartTable.getModel();
         model.setDataVector(convertListToData(shoppingItems), new String[] {"Product", "Quantity", "Price"});
-        productsTable.setModel(model);
+        model.fireTableDataChanged();
+        cartTable.setModel(model);
+        adjustTableHeight(cartTable, scrollPane);
+        
+        
         // totalValue.setText("£" + String.format("%.2f", loggingSession.getShoppingCart().calculateTotal()));
         // discountValue.setText("£" + String.format("%.2f", loggingSession.getShoppingCart().calculateDiscount()));
         // finalTotalValue.setText("£" + String.format("%.2f", loggingSession.getShoppingCart().calculateFinalTotal()));
@@ -132,6 +146,25 @@ public class ShoppingCartGUI extends JFrame {
 
         double finalTotal = total - discount;
         finalTotalValue.setText("£" + String.format("%.2f", finalTotal));
+    }
+
+    private void adjustTableHeight(JTable table, JScrollPane scrollPane) {
+        int rowHeight = table.getRowHeight();
+        int headerHeight = table.getTableHeader().getPreferredSize().height;
+        int rowsToShow = table.getRowCount();
+        int totalRowHeight = rowHeight * rowsToShow + headerHeight;
+    
+        // Set the preferred size of the scroll pane based on the total height of the rows and the header.
+        scrollPane.setPreferredSize(new Dimension(scrollPane.getPreferredSize().width, totalRowHeight+3));
+
+        // After adjusting the size, revalidate and repaint to apply changes
+        // cartTable.revalidate();
+        // cartTable.repaint();
+        // scrollPane.revalidate();
+        // scrollPane.repaint();
+
+        pack();
+        setVisible(true);
     }
  
 }

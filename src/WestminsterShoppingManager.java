@@ -1,10 +1,16 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.IOException;
 
 public class WestminsterShoppingManager implements ShoppingManager {
     static Scanner input = new Scanner(System.in);
@@ -15,6 +21,8 @@ public class WestminsterShoppingManager implements ShoppingManager {
     public WestminsterShoppingManager() {
         WestminsterShoppingManager.products = new ArrayList<>(50);
         WestminsterShoppingManager.users = new ArrayList<>();
+
+        loadUsers();
 
         // Creating 3 Clothing objects
         Clothing clothing1 = new Clothing("C01", "T-Shirt", 19.99, 50, "M", "Blue");
@@ -200,7 +208,30 @@ public class WestminsterShoppingManager implements ShoppingManager {
         System.out.println("Products are loaded successfully");
     }
 
+    public static void saveUsers() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("users.ser"))) {
+            oos.writeObject(users);
+            System.out.println("Users saved to file successfully.");
+        } catch (IOException e) {
+            System.out.println("Error saving Users to file: " + e.getMessage());
+        }
+
+    }
+
     
+    @SuppressWarnings("unchecked")
+    static void loadUsers() {
+        // Load the users ArrayList from a file using serialization
+        File file = new File("users.ser");
+        if (file.exists()) {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+                users = (ArrayList<User>) ois.readObject();
+                System.out.println("Users loaded from file successfully.");
+            } catch (IOException | ClassNotFoundException e) {
+                System.out.println("Error loading users from file: " + e.getMessage());
+            }
+        }
+    }
 
     public static int getVerifiedIntInput() {
         int inputInt = -1;
@@ -267,6 +298,9 @@ public class WestminsterShoppingManager implements ShoppingManager {
     public static void addUser(User user) {
         users.add(user);
     }
+
+    
+    
 
     
     

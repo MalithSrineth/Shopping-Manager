@@ -1,7 +1,8 @@
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.io.Serializable;
 
-public class Purchase {
+public class Purchase implements Serializable{
     private static int lastPurchaseID = 0;
     private int purchaseID;
     private LoggingSession loggingSession;
