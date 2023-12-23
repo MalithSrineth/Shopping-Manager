@@ -15,14 +15,11 @@ import java.io.IOException;
 public class WestminsterShoppingManager implements ShoppingManager {
     static Scanner input = new Scanner(System.in);
     private static ArrayList<Product> products;
-    private static ArrayList<User> users;
-    //public static Object getProducts;
+    
 
     public WestminsterShoppingManager() {
         WestminsterShoppingManager.products = new ArrayList<>(50);
-        WestminsterShoppingManager.users = new ArrayList<>();
-
-        loadUsers();
+        Database.getInstance().loadUsers();
 
         // Creating 3 Clothing objects
         Clothing clothing1 = new Clothing("C01", "T-Shirt", 19.99, 50, "M", "Blue");
@@ -208,31 +205,6 @@ public class WestminsterShoppingManager implements ShoppingManager {
         System.out.println("Products are loaded successfully");
     }
 
-    public static void saveUsers() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("users.ser"))) {
-            oos.writeObject(users);
-            System.out.println("Users saved to file successfully.");
-        } catch (IOException e) {
-            System.out.println("Error saving Users to file: " + e.getMessage());
-        }
-
-    }
-
-    
-    @SuppressWarnings("unchecked")
-    static void loadUsers() {
-        // Load the users ArrayList from a file using serialization
-        File file = new File("users.ser");
-        if (file.exists()) {
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-                users = (ArrayList<User>) ois.readObject();
-                System.out.println("Users loaded from file successfully.");
-            } catch (IOException | ClassNotFoundException e) {
-                System.out.println("Error loading users from file: " + e.getMessage());
-            }
-        }
-    }
-
     public static int getVerifiedIntInput() {
         int inputInt = -1;
         do {
@@ -278,30 +250,5 @@ public class WestminsterShoppingManager implements ShoppingManager {
             }
         }
         return product;
-    }
-
-    public static ArrayList<User> getUsers() {
-        return users;
-    }
-
-    public static User getUser(String username) {
-        User user = null;
-        for (User u : users) {
-            if (u.getUsername().equals(username)) {
-                user = u;
-                break;
-            }
-        }
-        return user;
-    }
-
-    public static void addUser(User user) {
-        users.add(user);
-    }
-
-    
-    
-
-    
-    
+    }    
 }

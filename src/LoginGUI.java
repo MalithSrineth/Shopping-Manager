@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -30,9 +31,8 @@ public class LoginGUI extends JFrame {
 
     private void initComponents() {
         // Initialize components
-        ArrayList<User> users = WestminsterShoppingManager.getUsers();
+        List<User> users = Database.getInstance().getUsers();
         
-
         welcomeLabel = new JLabel("Welcome to Westminster Shopping Center");
         usernameLabel = new JLabel("User Name:");
         passwordLabel = new JLabel("Password:");
@@ -88,7 +88,7 @@ public class LoginGUI extends JFrame {
                 }
                 
                 if (userExists) {
-                    User user = WestminsterShoppingManager.getUser(username);
+                    User user = Database.getInstance().getUser(username);
                     if (Arrays.equals(user.getPassword(), logInPasswordField.getPassword())) {
                         LoggingSession loggingSession = new LoggingSession(user);
                         JOptionPane.showMessageDialog(LoginGUI.this, "Login Successful!");
@@ -305,13 +305,13 @@ public class LoginGUI extends JFrame {
                     user.setPostalCode(Integer.parseInt(postalCodeField.getText()));
                     user.setPhoneNumber(phoneNumberField.getText());
 
-                    WestminsterShoppingManager.addUser(user);
-                    WestminsterShoppingManager.saveUsers();
+                    Database.getInstance().addUser(user);
+                    Database.getInstance().saveUsers();
 
                     JOptionPane.showMessageDialog(LoginGUI.this,
                         "Account Created!");
 
-                    for (User u : WestminsterShoppingManager.getUsers()) {
+                    for (User u : Database.getInstance().getUsers()) {
                         System.out.println(u.getUsername());
                     }
                 

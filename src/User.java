@@ -101,7 +101,7 @@ public class User implements Serializable {
     public void setUsername(String username) {
         if (username.matches("[a-zA-Z0-9]+")) {
             //Check if username already exists
-            for (User user : WestminsterShoppingManager.getUsers()) {
+            for (User user : Database.getInstance().getUsers()) {
                 if (user.getUsername().equals(username) && user != this) {
                     throw new IllegalArgumentException("Username Already Exists");
                 } else if (user.getUsername().equals(username) && user == this) {
