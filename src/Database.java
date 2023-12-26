@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,6 +15,7 @@ public class Database {
     private List<ShoppingCart> shoppingCarts;
     private List<Purchase> purchases;
     private List<LoggingSession> loggingSessions;
+    private List<DatabaseObserver> observers = new ArrayList<>();
 
     // Singleton instance
     private static Database instance;
@@ -27,6 +29,23 @@ public class Database {
         loggingSessions = new ArrayList<>();
     }
 
+    public void registerObserver(DatabaseObserver observer) {
+        if (!observers.contains(observer)) {
+            observers.add(observer);
+        }
+    }
+
+    public void unregisterObserver(DatabaseObserver observer) {
+        observers.remove(observer);
+    }
+
+    private void notifyObservers() {
+        for (DatabaseObserver observer : observers) {
+            observer.onProductsUpdated(new ArrayList<>(products));
+            observer.onUsersUpdated(new ArrayList<>(users));
+        }
+    }
+
     // Public method to get the instance of the Database
     public static synchronized Database getInstance() {
         if (instance == null) {
@@ -38,6 +57,7 @@ public class Database {
     // Methods to access and modify the users list
     public synchronized void addUser(User user) {
         users.add(user);
+        notifyObservers();
     }
 
     public synchronized User getUser(String username) {
@@ -62,41 +82,90 @@ public class Database {
         return new ArrayList<>(users); // Return a copy for encapsulation
     }
 
-    public synchronized void saveUsers() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("users.ser"))) {
-            oos.writeObject(users);
-            System.out.println("Users saved to file successfully.");
-        } catch (IOException e) {
-            System.out.println("Error saving Users to file: " + e.getMessage());
-        }
-
-    }
-
-    @SuppressWarnings("unchecked")
-    public synchronized void loadUsers() {
-        // Load the users ArrayList from a file using serialization
-        File file = new File("users.ser");
-        if (file.exists()) {
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-                users = (ArrayList<User>) ois.readObject();
-                System.out.println("Users loaded from file successfully.");
-            } catch (IOException | ClassNotFoundException e) {
-                System.out.println("Error loading users from file: " + e.getMessage());
-            }
-        }
-    }
-
-    // Similarly, add methods for products, shoppingCarts, purchases, loggingSessions...
-    // Example for products:
     public synchronized void addProduct(Product product) {
         products.add(product);
+        notifyObservers();
+    }
+
+    public synchronized void removeProduct(Product product) {
+        products.remove(product);
+        notifyObservers();
+    }
+
+
+    public synchronized void setProducts(List<Product> products) {
+        this.products = new ArrayList<>(products);
     }
 
     public synchronized List<Product> getProducts() {
         return new ArrayList<>(products); // Return a copy for encapsulation
     }
 
-    // ... and so on for other lists
+    public synchronized Product getProduct(String productID) {
+        for (Product product : products) {
+            if (product.getProductID().equals(productID)) {
+                return product;
+            }
+        }
+        return null;
+    }
+    
+    public synchronized void saveToFile(String type) {
+        String filename;
+        switch (type) {
+            case "users":
+                filename = "users.ser";
+                break;
+            case "products":
+                filename = "products.ser";
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown type: " + type);
+        }
 
-    // Consider adding methods to remove or update items as needed
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
+            switch (type) {
+                case "users":
+                    oos.writeObject(users);
+                    break;
+                case "products":
+                    oos.writeObject(products);
+                    break;
+            }
+            System.out.println(type + " saved to file successfully.");
+        } catch (IOException e) {
+            System.out.println("Error saving " + type + " to file: " + e.getMessage());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public synchronized void loadFromFile(String type) throws IllegalArgumentException {
+        File file;
+        switch (type) {
+            case "users":
+                file = new File("users.ser");
+                break;
+            case "products":
+                file = new File("products.ser");
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown type: " + type);
+        }
+        
+        if (file.exists()) {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+                switch (type) {
+                    case "users":
+                        users = (List<User>) ois.readObject();
+                        break;
+                    case "products":
+                        products = (List<Product>) ois.readObject();
+                        break;
+                }
+                System.out.println(type + " loaded from file successfully.");
+            } catch (IOException | ClassNotFoundException e) {
+                System.out.println("Error loading " + type + " from file: " + e.getMessage());
+            }
+        }
+    }
 }

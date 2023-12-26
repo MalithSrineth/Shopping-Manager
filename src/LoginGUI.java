@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -10,15 +11,24 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-public class LoginGUI extends JFrame {
+public class LoginGUI extends JFrame implements DatabaseObserver{
 
     private JTextField usernameField, firstNameField, lastNameField, genderField, ageField, signUpUsernameField, emailField, addressLine1Field, addressLine2Field, cityField, countryField, postalCodeField, phoneNumberField;
     private JPasswordField logInPasswordField, signUPasswordField, reEnterPasswordField;
     private JButton loginButton, signUpButton;
     private JLabel welcomeLabel, usernameLabel, passwordLabel;
+
+    private List<User> users = Database.getInstance().getUsers();
     
 
     public LoginGUI() {
+       
+        for (User user : users) {
+            System.out.println(user.getUsername());
+        }
+
+        Database.getInstance().registerObserver(this);
+
         setTitle("Westminster Shopping Center Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridBagLayout());
@@ -29,9 +39,14 @@ public class LoginGUI extends JFrame {
         setVisible(true);
     }
 
+    @Override
+    public void onUsersUpdated(List<User> updatedUsers) {
+        this.users = updatedUsers;
+        System.out.println("WestminsterShoppingManager: User list updated.");
+    }
+
     private void initComponents() {
         // Initialize components
-        List<User> users = Database.getInstance().getUsers();
         
         welcomeLabel = new JLabel("Welcome to Westminster Shopping Center");
         usernameLabel = new JLabel("User Name:");
@@ -306,7 +321,7 @@ public class LoginGUI extends JFrame {
                     user.setPhoneNumber(phoneNumberField.getText());
 
                     Database.getInstance().addUser(user);
-                    Database.getInstance().saveUsers();
+                    Database.getInstance().saveToFile("users");
 
                     JOptionPane.showMessageDialog(LoginGUI.this,
                         "Account Created!");

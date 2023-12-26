@@ -1,12 +1,13 @@
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.io.Serializable;
 
 public class LoggingSession implements Serializable{
     private static int lastSessionID = 0;
     private int sessionID;
     private User user;
-    private ShoppingCart shoppingCart;
+    private ArrayList<ShoppingCart> shoppingCarts = new ArrayList<>();
     private LocalDate date;
     private LocalTime time;
 
@@ -14,10 +15,18 @@ public class LoggingSession implements Serializable{
         setSessionID();
         this.sessionID = getSessionID();
         this.user = user;
-        this.shoppingCart = user.getShoppingCart();
+        this.shoppingCarts.add(new ShoppingCart(user.getShoppingCart()));
         this.date = LocalDate.now();
         this.time = LocalTime.now();
     }
+
+    public LoggingSession(LoggingSession other) {
+        this.user = new User(other.user); 
+        this.shoppingCarts = new ArrayList<>(other.shoppingCarts); 
+        this.date = other.date;
+        this.time = other.time;
+    }
+
 
     public static int getLastSessionID() {
         return lastSessionID;
@@ -45,12 +54,20 @@ public class LoggingSession implements Serializable{
         this.user = user;
     }
 
-    public ShoppingCart getShoppingCart() {
-        return shoppingCart;
+    public ShoppingCart getShoppingCart() {       
+        return shoppingCarts.get(shoppingCarts.size() - 1);
     }
 
     public void setShoppingCart(ShoppingCart shoppingCart) {
-        this.shoppingCart = shoppingCart;
+        if (shoppingCarts.isEmpty()) {
+            shoppingCarts.add(shoppingCart);
+        } else {
+            shoppingCarts.add(shoppingCarts.size(), shoppingCart);
+        }
+    }
+
+    public ArrayList<ShoppingCart> getShoppingCarts() {
+        return shoppingCarts;
     }
 
     public LocalDate getDate() {

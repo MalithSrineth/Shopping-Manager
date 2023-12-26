@@ -1,10 +1,10 @@
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         WestminsterShoppingManager westminsterShoppingManager = new WestminsterShoppingManager();
-        ArrayList<Product> products = WestminsterShoppingManager.getProducts();
+        List<Product> products = Database.getInstance().getProducts();
 
         String menu = "=======================================\n" +
                       "Welcome to Westminster Shopping Manager\n" +

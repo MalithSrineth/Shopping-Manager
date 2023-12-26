@@ -4,6 +4,7 @@ import javax.xml.crypto.Data;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ShoppingGUI extends JFrame {
 
@@ -12,6 +13,7 @@ public class ShoppingGUI extends JFrame {
     private JLabel productIdLabel, categoryLabel, nameLabel, customitemLabel_1, customitemLabel_2, availableLabel, productCategoryLabel, detailsJLabel;
     private JButton shoppingCartButton, sortButton, addToCartButton;
     private JScrollPane scrollPane;
+    private List<Product> products = Database.getInstance().getProducts();
 
 
     public ShoppingGUI(LoggingSession loggingSession) {
@@ -45,7 +47,7 @@ public class ShoppingGUI extends JFrame {
         String[] columnNames = {"Product ID", "Name", "Category", "Price(£)", "Info"};
 
         //Populating the table with data
-        ArrayList<Product> products = WestminsterShoppingManager.getProducts();
+        //List<Product> products = Database.getInstance().getProducts();
         DefaultTableModel model = new DefaultTableModel(convertListToData(products), columnNames);
         productsTable = new JTable(model);
         productsTable.isCellEditable(0, 0);
@@ -90,7 +92,7 @@ public class ShoppingGUI extends JFrame {
 
         categoryComboBox.addActionListener(categoryComboBoxActionEvent -> {
             String selectedCategory = (String) categoryComboBox.getSelectedItem();
-            ArrayList<Product> products = WestminsterShoppingManager.getProducts();
+            //List<Product> products = Database.getInstance().getProducts();
             if (selectedCategory.equals("All")) {
                 productsTable.setModel(new DefaultTableModel(convertListToData(products), new String[]{"Product ID", "Name", "Category", "Price(£)", "Info"}));
             } else if (selectedCategory.equals("Electronics")) {
@@ -147,7 +149,7 @@ public class ShoppingGUI extends JFrame {
 
         sortButton.addActionListener(sortButtonActionEvent -> {
             ArrayList<Product> products = new ArrayList<Product>();
-            for (Product product : WestminsterShoppingManager.getProducts()) {
+            for (Product product : Database.getInstance().getProducts()) {
                 products.add(product);
             }
             products.sort((Product p1, Product p2) -> p1.getProductID().compareTo(p2.getProductID()));
@@ -159,6 +161,7 @@ public class ShoppingGUI extends JFrame {
                     }
                 }
                 productsTable.setModel(new DefaultTableModel(convertListToData(electronics), new String[]{"Product ID", "Name", "Category", "Price(£)", "Info"}));
+            
             } else if (categoryComboBox.getSelectedItem().equals("Clothing")) {
                 ArrayList<Product> clothing = new ArrayList<>();
                 for (Product product : products) {
@@ -167,6 +170,7 @@ public class ShoppingGUI extends JFrame {
                     }
                 }
                 productsTable.setModel(new DefaultTableModel(convertListToData(clothing), new String[]{"Product ID", "Name", "Category", "Price(£)", "Info"}));
+            
             } else
             productsTable.setModel(new DefaultTableModel(convertListToData(products), new String[]{"Product ID", "Name", "Category", "Price(£)", "Info"}));
         });
@@ -188,7 +192,7 @@ public class ShoppingGUI extends JFrame {
                 int col = productsTable.columnAtPoint(evt.getPoint());
                 if (row >= 0 && col >= 0) {
                     String productID = (String) productsTable.getValueAt(row, 0);
-                    Product product = WestminsterShoppingManager.getProduct(productID);
+                    Product product = Database.getInstance().getProduct(productID);
                     detailsJLabel.setText("Selected Product - Details");
                     productIdLabel.setText("Product ID: " + product.getProductID());
                     categoryLabel.setText("Category: " + product.getClass().getName());
@@ -248,14 +252,14 @@ public class ShoppingGUI extends JFrame {
             int row = productsTable.getSelectedRow();
             if (row >= 0) {
                 String productID = (String) productsTable.getValueAt(row, 0);
-                Product product = WestminsterShoppingManager.getProduct(productID);
+                Product product = Database.getInstance().getProduct(productID);
                 int quantity = product.getProductQuantity();
                 if (quantity == 0) {
                     JOptionPane.showMessageDialog(null, "Product is Out of Stock");
                     return;
 
                 } else {
-                    loggingSession.getShoppingCart().addProduct(product);
+                    loggingSession.getShoppingCart().addProduct(product, loggingSession);
                     product.setProductQuantity(--quantity);
                     productsTable.clearSelection();
                     detailsJLabel.setText("Select a Product to View Details");
@@ -268,7 +272,7 @@ public class ShoppingGUI extends JFrame {
                     }       
                 }
                 
-                ArrayList<Product> products = WestminsterShoppingManager.getProducts();
+                //ArrayList<Product> products = WestminsterShoppingManager.getProducts();
                 for (Product p : products) {
                     System.out.println(p.getProductQuantity());
                 }
@@ -290,7 +294,7 @@ public class ShoppingGUI extends JFrame {
 
     }
 
-    private Object[][] convertListToData(ArrayList<Product> productList) {
+    private Object[][] convertListToData(List<Product> productList) {
         Object[][] data = new Object[productList.size()][5];
         for (int i = 0; i < productList.size(); i++) {
             Product product = productList.get(i);

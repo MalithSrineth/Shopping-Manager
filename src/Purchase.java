@@ -13,7 +13,7 @@ public class Purchase implements Serializable{
     public Purchase(LoggingSession loggingSession) {
         setPurchaseID();
         this.purchaseID = getPurchaseID();
-        this.loggingSession = loggingSession;
+        this.loggingSession = new LoggingSession(loggingSession);
         this.date = LocalDate.now();
         this.time = LocalTime.now();
     }

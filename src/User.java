@@ -1,4 +1,6 @@
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class User implements Serializable {
     private String firstName;
@@ -14,29 +16,30 @@ public class User implements Serializable {
     private int postalCode;
     private String phoneNumber;
     private ShoppingCart shoppingCart;
-    private Purchase[] purchases;
+    private ArrayList<Purchase> purchases;
 
 
     public User() {
         this.shoppingCart = new ShoppingCart();
-        this.purchases = new Purchase[0];
+        this.purchases = new ArrayList<>();
     }
 
-    public User(String firstName, String lastName, String gender, int age, String username, String email, char[] password, String address, String city, String country, int postalCode, String phoneNumber) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.gender = gender;
-        this.age = age;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.address = address;
-        this.city = city;
-        this.country = country;
-        this.postalCode = postalCode;
-        this.phoneNumber = phoneNumber;
-        
-    }    
+    public User(User other) {
+        this.firstName = other.firstName;
+        this.lastName = other.lastName;
+        this.gender = other.gender;
+        this.age = other.age;
+        this.username = other.username;
+        this.email = other.email;
+        this.password = Arrays.copyOf(other.password, other.password.length); // copy the password array
+        this.address = other.address;
+        this.city = other.city;
+        this.country = other.country;
+        this.postalCode = other.postalCode;
+        this.phoneNumber = other.phoneNumber;
+        this.shoppingCart = new ShoppingCart(other.shoppingCart); // assuming ShoppingCart has a copy constructor
+        this.purchases = new ArrayList<>(other.purchases); // creates a shallow copy of the purchases list
+    }
 
 
     public String getFirstName() {
@@ -219,11 +222,15 @@ public class User implements Serializable {
         this.shoppingCart = shoppingCart;
     }
 
-    public Purchase[] getPurchases() {
+    public ArrayList<Purchase> getPurchases() {
         return purchases;
     }
 
-    public void setPurchases(Purchase[] purchases) {
+    public void addPurchase(Purchase purchase) {
+        purchases.add(purchase);
+    }
+
+    public void setPurchases(ArrayList<Purchase> purchases) {
         this.purchases = purchases;
     }
 

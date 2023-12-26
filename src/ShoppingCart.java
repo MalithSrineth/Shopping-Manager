@@ -13,11 +13,13 @@ public class ShoppingCart implements Serializable{
         this.discount = 0;
     }
 
-    public ShoppingCart(Map<Product, Integer> products) {
-        this.products = products;
+    public ShoppingCart(ShoppingCart shoppingCart) {
+        this.products = new LinkedHashMap<>(shoppingCart.products);
+        this.total = shoppingCart.total;
+        this.discount = shoppingCart.discount;
     }
 
-    public void addProduct(Product product) {
+    public void addProduct(Product product, LoggingSession loggingSession) {
         if (products.containsKey(product)) {
             products.put(product, products.get(product) + 1);
         } else {
@@ -25,6 +27,7 @@ public class ShoppingCart implements Serializable{
         }
 
         setTotal();
+        calculateDiscount(loggingSession);
     } 
 
     public void removeProduct(Product product) {
@@ -39,7 +42,8 @@ public class ShoppingCart implements Serializable{
     }
 
     public void emptyCart() {
-        products.clear();
+        this.products.clear();
+        setTotal();
     }
 
     // public double calculateTotal() {
@@ -76,6 +80,14 @@ public class ShoppingCart implements Serializable{
 
     public void setDiscount(double discount) {
         this.discount = discount;
+    }
+
+    public void calculateDiscount(LoggingSession loggingSession) {
+        if (loggingSession.getShoppingCarts().size() == 1) {
+            ShoppingCart shoppingCart = loggingSession.getShoppingCarts().get(0);
+            double discount = shoppingCart.getTotal()*10/100; 
+            shoppingCart.setDiscount(discount);
+        }
     }
 
 }

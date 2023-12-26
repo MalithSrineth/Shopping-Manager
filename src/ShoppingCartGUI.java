@@ -12,7 +12,7 @@ public class ShoppingCartGUI extends JFrame {
     private JLabel totalLabel, totalValue;
     private JLabel discountLabel, discountValue;
     private JLabel finalTotalLabel, finalTotalValue;
-    private JButton buyNowButton, shopMoreButton;
+    private JButton clearCartButton, checkoutButton;
     private JScrollPane scrollPane;
 
     public ShoppingCartGUI(LoggingSession loggingSession) {
@@ -20,7 +20,7 @@ public class ShoppingCartGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridBagLayout());
         initComponents(loggingSession);
-        layoutComponents();
+        layoutComponents(loggingSession);
         setMinimumSize(new Dimension(400, 250));
         setMaximumSize(new Dimension(400, 500));
         pack();
@@ -54,12 +54,12 @@ public class ShoppingCartGUI extends JFrame {
         updateTotals(loggingSession);
 
         // Buttons
-        buyNowButton = new JButton("Buy Now");
-        shopMoreButton = new JButton("Shop More");
+        clearCartButton = new JButton("Clear Cart");
+        checkoutButton = new JButton("Checkout");
 
     }
 
-    private void layoutComponents() {
+    private void layoutComponents(LoggingSession loggingSession) {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
     
@@ -98,8 +98,22 @@ public class ShoppingCartGUI extends JFrame {
         gbc.fill = GridBagConstraints.CENTER;
         gbc.anchor = GridBagConstraints.CENTER;
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.add(buyNowButton);
-        buttonPanel.add(shopMoreButton);
+        buttonPanel.add(clearCartButton);
+        clearCartButton.addActionListener(e -> {
+            loggingSession.getShoppingCart().emptyCart();
+            updateCart(loggingSession);
+            updateTotals(loggingSession);
+        });
+        buttonPanel.add(checkoutButton);
+
+        checkoutButton.addActionListener(e -> {
+            Purchase purchase = new Purchase(loggingSession);
+            loggingSession.getUser().addPurchase(purchase);
+            loggingSession.getUser().getShoppingCart().emptyCart();
+            loggingSession.setShoppingCart(new ShoppingCart());
+            updateCart(loggingSession);
+            updateTotals(loggingSession);
+        });
         add(buttonPanel, gbc);
     }
 
@@ -135,9 +149,9 @@ public class ShoppingCartGUI extends JFrame {
         totalValue.setText("£" + String.format("%.2f", total));
 
         double discount = loggingSession.getShoppingCart().getDiscount();
-        if (loggingSession.getUser().getPurchases().length == 0) {
-            discount = total * 10 / 100;
-            loggingSession.getShoppingCart().setDiscount(discount);
+        if (loggingSession.getUser().getPurchases().size() == 0) {
+            // discount = total * 10 / 100;
+            // loggingSession.getShoppingCart().setDiscount(discount);
             discountValue.setText("£" + String.format("%.2f", discount));
         }
         else {
